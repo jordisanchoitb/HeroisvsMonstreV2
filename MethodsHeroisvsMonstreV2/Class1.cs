@@ -1,6 +1,6 @@
 ﻿namespace MethodsHeroisvsMonstreV2
 {
-    public class Methods
+    public static class Methods
     {
 
     }
