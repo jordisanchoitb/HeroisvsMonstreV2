@@ -26,7 +26,8 @@ namespace GameProject
             const string MsgLevelChoiseHard = "Has escollit el nivell dificil";
             const string MsgLevelChoiseCustomized = "Has escollit el nivell personalitzat";
             const string MsgLevelChoiseRandom = "Has escollit el nivell random";
-
+            const string MsgNameHeros = "Introdueix el nom dels herois tots junts separats per comas,\nsol tens un intent en cas d'equivocarte s'asignaran els noms per defecta.\nEl ordre en el que s'assignaran els noms es primer Arquera, segon Barbar, tercer Maga, Quart Duida\n(Exemple: Aishi, Joan, David, Marta):";
+            const string MsgNameHerosIs = "Els noms asignats als herois son:\nArquera: {0}\nBarbar: {1}\nMaga: {2}\nDruida: {3}";
             // Constants
             const int MaxTries = 3;
             const int OptionNewGame = 1;
@@ -38,9 +39,10 @@ namespace GameProject
 
 
             // Variables
+            string nameArcher = "", nameBarbarian = "", nameMagician = "", nameDruid = "";
             int userOption, trys = 0;
             bool errorMenu = false;
-
+            
             // Inici del programa
             Console.WriteLine(MsgWelcome);
             do
@@ -77,24 +79,39 @@ namespace GameProject
                 {
                     Console.WriteLine();
                     Console.WriteLine(MsgLevelChoiseEasy);
-                    
+                    Console.WriteLine(MsgNameHeros);
+                    Methods.AssignNameHeros(ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
+                    Console.WriteLine(MsgNameHerosIs,nameArcher, nameBarbarian, nameMagician, nameDruid);
+
+
                 }
                 else if (Methods.ComprovUserOptionsAndTrys(userOption, LevelHard, trys))
                 {
                     Console.WriteLine();
                     Console.WriteLine(MsgLevelChoiseHard);
-                    
+                    Console.WriteLine(MsgNameHeros);
+                    Methods.AssignNameHeros(ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
+                    Console.WriteLine(MsgNameHerosIs, nameArcher, nameBarbarian, nameMagician, nameDruid);
+
+
                 }
                 else if (Methods.ComprovUserOptionsAndTrys(userOption, LevelCustomized, trys))
                 {
                     Console.WriteLine();
                     Console.WriteLine(MsgLevelChoiseCustomized);
-                    
+                    Console.WriteLine(MsgNameHeros);
+                    Methods.AssignNameHeros(ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
+                    Console.WriteLine(MsgNameHerosIs, nameArcher, nameBarbarian, nameMagician, nameDruid);
+
+
                 }
                 else if (Methods.ComprovUserOptionsAndTrys(userOption, LevelRandom, trys))
                 {
                     Console.WriteLine();
                     Console.WriteLine(MsgLevelChoiseRandom);
+                    Console.WriteLine(MsgNameHeros);
+                    Methods.AssignNameHeros(ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
+                    Console.WriteLine(MsgNameHerosIs, nameArcher, nameBarbarian, nameMagician, nameDruid);
 
                 }
                 else
