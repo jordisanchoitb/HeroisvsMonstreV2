@@ -60,6 +60,177 @@
             return random.Next(minValue, maxValue);
         }
 
+        public static void PrintHpHerosDesc(double hparcher, double hpbarbarian, double hpmagician, double hpdruid, string namearcher, string namebarbarian, string namemagician, string namedruid)
+        {
+            const string MsgHpHerosDesc = "Vida restan dels herois: ";
+            const string MsgHpHerosArcher = "{0} (Arquera): {1}";
+            const string MsgHpHerosBarbarian = "{0} (Barbar): {1}";
+            const string MsgHpHerosMagician = "{0} (Maga): {1}";
+            const string MsgHpHerosDruid = "{0} (Druida): {1}";
 
+            Console.WriteLine(MsgHpHerosDesc);
+            if (hparcher > hpbarbarian && hparcher > hpmagician && hparcher > hpdruid)
+            {
+                Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                if (hpbarbarian > hpmagician && hpbarbarian > hpdruid)
+                {
+                    Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                    if (hpmagician > hpdruid)
+                    {
+                        Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                        Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                    } else
+                    {
+                        Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                        Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                    }
+                } else if (hpmagician > hpbarbarian && hpmagician > hpdruid)
+                {
+                    Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                    if (hpbarbarian > hpdruid)
+                    {
+                        Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                        Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                    } else
+                    {
+                        Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                        Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                    }
+                } else if (hpdruid > hpbarbarian && hpdruid > hpmagician)
+                {
+                    Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                    if (hpbarbarian > hpmagician)
+                    {
+                        Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                        Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                    } else
+                    {
+                        Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                        Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                    }
+                }
+            } else if (hpbarbarian > hparcher && hpbarbarian > hpmagician && hpbarbarian > hpdruid)
+            {
+                Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                if (hparcher > hpmagician && hparcher > hpdruid)
+                {
+                    Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                    if (hpmagician > hpdruid)
+                    {
+                        Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                        Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                    } else
+                    {
+                        Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                        Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                    }
+                } else if (hpmagician > hparcher && hpmagician > hpdruid)
+                {
+                    Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                    if (hparcher > hpdruid)
+                    {
+                        Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                        Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                    } else
+                    {
+                        Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                        Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                    }
+                } else if (hpdruid > hparcher && hpdruid > hpmagician)
+                {
+                    Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                    if (hparcher > hpmagician)
+                    {
+                        Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                        Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                    } else
+                    {
+                        Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                        Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                    }
+                }
+            } else if (hpmagician > hparcher && hpmagician > hpbarbarian && hpmagician > hpdruid)
+            {
+                Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                if (hparcher > hpbarbarian && hparcher > hpdruid)
+                {
+                    Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                    if (hpbarbarian > hpdruid)
+                    {
+                        Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                        Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                    } else
+                    {
+                        Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                        Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                    }
+                } else if (hpbarbarian > hparcher && hpbarbarian > hpdruid)
+                {
+                    Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                    if (hparcher > hpdruid)
+                    {
+                        Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                        Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                    } else
+                    {
+                        Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                        Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                    }
+                } else if (hpdruid > hparcher && hpdruid > hpbarbarian)
+                {
+                    Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                    if (hparcher > hpbarbarian)
+                    {
+                        Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                        Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                    } else
+                    {
+                        Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                        Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                    }
+                }
+            } else if (hpdruid > hparcher && hpdruid > hpbarbarian && hpdruid > hpmagician)
+            {
+                Console.WriteLine(MsgHpHerosDruid, namedruid, hpdruid);
+                if (hparcher > hpbarbarian && hparcher > hpmagician)
+                {
+                    Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                    if (hpbarbarian > hpmagician)
+                    {
+                        Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                        Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                    } else
+                    {
+                        Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                        Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                    }
+                } else if (hpbarbarian > hparcher && hpbarbarian > hpmagician)
+                {
+                    Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                    if (hparcher > hpmagician)
+                    {
+                        Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                        Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                    } else
+                    {
+                        Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                        Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                    }
+                } else if (hpmagician > hparcher && hpmagician > hpbarbarian)
+                {
+                    Console.WriteLine(MsgHpHerosMagician, namemagician, hpmagician);
+                    if (hparcher > hpbarbarian)
+                    {
+                        Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                        Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                    } else
+                    {
+                        Console.WriteLine(MsgHpHerosBarbarian, namebarbarian, hpbarbarian);
+                        Console.WriteLine(MsgHpHerosArcher, namearcher, hparcher);
+                    }
+                }
+            }
+
+        }
     }
 }
