@@ -40,5 +40,21 @@
                 nameDruid = MsgNameHerosDruid;
             }
         }
+
+        public static void AssignValue(ref double variableAssign, ref double valueCharacter, double minValueCharacter, double maxValueCharacter, int trys, string MsgAutomaticSetValue)
+        {
+            if (trys == 3 && !(valueCharacter >= minValueCharacter && valueCharacter <= maxValueCharacter))
+            {
+                variableAssign = minValueCharacter;
+                Console.WriteLine(MsgAutomaticSetValue);
+            }
+            else
+            {
+                variableAssign = valueCharacter;
+            }
+        }
+
+
+
     }
 }
