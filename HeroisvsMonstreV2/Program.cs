@@ -92,7 +92,7 @@ namespace GameProject
 
 
             // Variables
-            string nameArcher = "", nameBarbarian = "", nameMagician = "", nameDruid = "";
+            string nameArcher = "", nameBarbarian = "", nameMagician = "", nameDruid = "", stringNameHeros;
             int userOption, trys = 0;
             double inputUser;
             bool errorMenu = false;
@@ -143,7 +143,8 @@ namespace GameProject
                     Console.WriteLine();
                     Console.WriteLine(MsgLevelChoiseEasy);
                     Console.WriteLine(MsgNameHeros);
-                    Methods.AssignNameHeros(ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
+                    stringNameHeros = Console.ReadLine() ?? "";
+                    Methods.AssignNameHeros(stringNameHeros, ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
                     Console.WriteLine(MsgNameHerosIs,nameArcher, nameBarbarian, nameMagician, nameDruid);
 
 
@@ -153,7 +154,8 @@ namespace GameProject
                     Console.WriteLine();
                     Console.WriteLine(MsgLevelChoiseHard);
                     Console.WriteLine(MsgNameHeros);
-                    Methods.AssignNameHeros(ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
+                    stringNameHeros = Console.ReadLine() ?? "";
+                    Methods.AssignNameHeros(stringNameHeros, ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
                     Console.WriteLine(MsgNameHerosIs, nameArcher, nameBarbarian, nameMagician, nameDruid);
 
 
@@ -165,7 +167,8 @@ namespace GameProject
                     Console.WriteLine();
                     Console.WriteLine(MsgLevelChoiseCustomized);
                     Console.WriteLine(MsgNameHeros);
-                    Methods.AssignNameHeros(ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
+                    stringNameHeros = Console.ReadLine() ?? "";
+                    Methods.AssignNameHeros(stringNameHeros, ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
                     Console.WriteLine(MsgNameHerosIs, nameArcher, nameBarbarian, nameMagician, nameDruid);
                     Console.WriteLine(MsgPressToContinue);
                     Console.ReadKey();
@@ -435,7 +438,8 @@ namespace GameProject
                     Console.WriteLine();
                     Console.WriteLine(MsgLevelChoiseRandom);
                     Console.WriteLine(MsgNameHeros);
-                    Methods.AssignNameHeros(ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
+                    stringNameHeros = Console.ReadLine() ?? "";
+                    Methods.AssignNameHeros(stringNameHeros, ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
                     Console.WriteLine(MsgNameHerosIs, nameArcher, nameBarbarian, nameMagician, nameDruid);
 
                 }
