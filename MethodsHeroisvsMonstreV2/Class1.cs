@@ -64,6 +64,11 @@
             return random.Next(minValue, maxValue);
         }
 
+        public static bool ProbCriticHit(double percProbCritic)
+        {
+            return RandomNumber(1, 101) <= percProbCritic;
+        }
+
         public static void PrintHpHerosDesc(double hparcher, double hpbarbarian, double hpmagician, double hpdruid, string namearcher, string namebarbarian, string namemagician, string namedruid)
         {
             const string MsgHpHerosDesc = "Vida restan dels herois: ";
