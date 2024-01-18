@@ -60,6 +60,23 @@ namespace GameProject
             const string MSGSetAtkMonster = "Atac [300-400]: ";
             const string MSGSetDamageReductionMonster = "Reducció de dany (valor percentual) [20-30] %: ";
 
+            // Msg batalla
+            const string MsgAtk = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep només {3} de dany. Vida restant de {1}: {4}";
+            // Exemple: L'Arquera ataca a Monstre amb 180 de dany. El Monstre es defensa i rep només 144 de dany. Vida restant del Monstre: 8856
+            const string MsgAtkCrit = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep només {3} de dany. Vida restant de {1}: {4}. {0} ha fet un atac critic.";
+            const string MsgFailAtk = "{0} ataca a {1} pero falla el atac.";
+            const string MsgBattleStart = "Comença la batalla";
+            const string MSGAction = "Torn de {0}. Selecciona l’acció:";
+            const string MSGDeathNotHeal = "{0} esta mort per tant no es pot cura.";
+            const string MSGDeathCharacter = "{0} esta morta.";
+
+            // Msg Habilitats especials
+            const string MSGActionEspecialHabilityArcher = "{0} activa la seva habilitat especial i noqueja el monstre durant 2 torns (no pot atacar).";
+            const string MSGActionEspecialHabilityBarbarian = "{0} activa la seva habilitat especial i durant 3 torns el valor de la seva reducció de dany serà del 100%.";
+            const string MSGActionEspecialHabilityMagician = "{0} activa la seva habilitat especial, dispara una bola de foc que fa 3 cops el seu atac.";
+            const string MSGActionEspecialHabilityDruid = "{0} activa la seva habilitat especial, cura la vida de tots els herois 500 punts de vida.";
+
+
             // Constants
             const int MaxTries = 3;
             const int OptionNewGame = 1;
