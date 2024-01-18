@@ -64,9 +64,9 @@
             return random.Next(minValue, maxValue);
         }
 
-        public static bool ProbCriticHit(double percProbCritic)
+        public static bool Probability(double percProbabilitat)
         {
-            return RandomNumber(1, 101) <= percProbCritic;
+            return RandomNumber(1, 101) <= percProbabilitat;
         }
 
         public static void PrintHpHerosDesc(double hparcher, double hpbarbarian, double hpmagician, double hpdruid, string namearcher, string namebarbarian, string namemagician, string namedruid)
