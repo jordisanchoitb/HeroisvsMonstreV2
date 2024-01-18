@@ -27,7 +27,7 @@ namespace GameProject
             const string MsgLevelChoiseHard = "Has escollit el nivell dificil";
             const string MsgLevelChoiseCustomized = "Has escollit el nivell personalitzat";
             const string MsgLevelChoiseRandom = "Has escollit el nivell random";
-            const string MsgNameHeros = "Introdueix el nom dels herois tots junts separats per comas,\nsol tens un intent en cas d'equivocarte s'asignaran els noms per defecta.\nEl ordre en el que s'assignaran els noms es primer Arquera, segon Barbar, tercer Maga, Quart Duida\n(Exemple: Aishi, Joan, David, Marta):";
+            const string MsgNameHeros = "Introdueix el nom dels herois tots junts separats per comas,\nsol tens un intent en cas d'equivocarte s'asignaran els noms per defecta.\nEl ordre en el que s'assignaran els noms es primer Arquera, segon Barbar, tercer Maga, quart Duida\n(Exemple: Aishi, Joan, David, Marta):";
             const string MsgNameHerosIs = "Els noms asignats als herois son:\nArquera: {0}\nBarbar: {1}\nMaga: {2}\nDruida: {3}";
             const string MsgStartAssignCharactersValues = "Comencem a asignar valors als personatges.";
             const string MsgAssignCharactersArcher = "Primer asignarem els valors a l'Arquera";
@@ -41,23 +41,23 @@ namespace GameProject
             const string MsgPressToContinue = "Prem una tecla per continuar...";
             // Archer
             const string MSGSetHpArcher = "Vida [1500-2000]: ";
-            const string MSGSetAtkArcher = "Atac [180-300]: ";
-            const string MSGSetDamageReductionArcher = "Reducció de dany (valor percentual) [25-40] %: ";
+            const string MSGSetAtkArcher = "Atac [200-300]: ";
+            const string MSGSetDamageReductionArcher = "Reducció de dany (valor percentual) [25-35] %: ";
             // Barbarian
             const string MSGSetHpBarbarian = "Vida [3000-3750]: ";
             const string MSGSetAtkBarbarian = "Atac [150-250]: ";
             const string MSGSetDamageReductionBarbarian = "Reducció de dany (valor percentual) [35-45] %: ";
             // Magician
-            const string MSGSetHpMagician = "Vida [1000-1500]: ";
-            const string MSGSetAtkMagician = "Atac [300-350]: ";
+            const string MSGSetHpMagician = "Vida [1100-1500]: ";
+            const string MSGSetAtkMagician = "Atac [300-400]: ";
             const string MSGSetDamageReductionMagician = "Reducció de dany (valor percentual) [20-35] %: ";
             // Druid
             const string MSGSetHpDruid = "Vida [2000-2500]: ";
             const string MSGSetAtkDruid = "Atac [70-120]: ";
             const string MSGSetDamageReductionDruid = "Reducció de dany (valor percentual) [25-40] %: ";
             // Monstre
-            const string MSGSetHpMonster = "Vida [9000-12000]: ";
-            const string MSGSetAtkMonster = "Atac [250-400]: ";
+            const string MSGSetHpMonster = "Vida [7000-10000]: ";
+            const string MSGSetAtkMonster = "Atac [300-400]: ";
             const string MSGSetDamageReductionMonster = "Reducció de dany (valor percentual) [20-30] %: ";
 
             // Constants
@@ -68,27 +68,28 @@ namespace GameProject
             const int LevelHard = 2;
             const int LevelCustomized = 3;
             const int LevelRandom = 4;
+            const int One = 1;
 
             /* Constantes valores Max i Min de los atributos */
-            const double HpMinArcher = 1500, HpMaxArcher = 2000;
-            const double AtkMinArcher = 180, AtkMaxArcher = 300;
-            const double DamageReductionMinArcher = 25, DamageReductionMaxArcher = 40;
+            const int HpMinArcher = 1500, HpMaxArcher = 2000;
+            const int AtkMinArcher = 200, AtkMaxArcher = 300;
+            const int DamageReductionMinArcher = 25, DamageReductionMaxArcher = 35;
 
-            const double HpMinBarbarian = 3000, HpMaxBarbarian = 3750;
-            const double AtkMinBarbarian = 150, AtkMaxBarbarian = 250;
-            const double DamageReductionMinBarbarian = 35, DamageReductionMaxBarbarian = 45;
+            const int HpMinBarbarian = 3000, HpMaxBarbarian = 3750;
+            const int AtkMinBarbarian = 150, AtkMaxBarbarian = 250;
+            const int DamageReductionMinBarbarian = 35, DamageReductionMaxBarbarian = 45;
 
-            const double HpMinMagician = 1000, HpMaxMagician = 1500;
-            const double AtkMinMagician = 300, AtkMaxMagician = 350;
-            const double DamageReductionMinMagician = 20, DamageReductionMaxMagician = 35;
+            const int HpMinMagician = 1100, HpMaxMagician = 1500;
+            const int AtkMinMagician = 300, AtkMaxMagician = 400;
+            const int DamageReductionMinMagician = 20, DamageReductionMaxMagician = 35;
 
-            const double HpMinDruid = 2000, HpMaxDruid = 2500;
-            const double AtkMinDruid = 70, AtkMaxDruid = 120;
-            const double DamageReductionMinDruid = 25, DamageReductionMaxDruid = 40;
+            const int HpMinDruid = 2000, HpMaxDruid = 2500;
+            const int AtkMinDruid = 70, AtkMaxDruid = 120;
+            const int DamageReductionMinDruid = 25, DamageReductionMaxDruid = 40;
 
-            const double HpMinMonster = 9000, HpMaxMonster = 12000;
-            const double AtkMinMonster = 250, AtkMaxMonster = 400;
-            const double DamageReductionMinMonster = 20, DamageReductionMaxMonster = 30;
+            const int HpMinMonster = 7000, HpMaxMonster = 10000;
+            const int AtkMinMonster = 300, AtkMaxMonster = 400;
+            const int DamageReductionMinMonster = 20, DamageReductionMaxMonster = 30;
 
 
             // Variables
@@ -123,6 +124,7 @@ namespace GameProject
             
             if (Methods.ComprovUserOptionsAndTrys(userOption,OptionNewGame,trys))
             {
+                Console.Clear();
                 errorMenu = false;
                 trys = 0;
                 do
@@ -140,28 +142,47 @@ namespace GameProject
 
                 if (Methods.ComprovUserOptionsAndTrys(userOption, LevelEasy, trys))
                 {
+                    Console.Clear();
                     Console.WriteLine();
                     Console.WriteLine(MsgLevelChoiseEasy);
                     Console.WriteLine(MsgNameHeros);
                     stringNameHeros = Console.ReadLine() ?? "";
                     Methods.AssignNameHeros(stringNameHeros, ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
                     Console.WriteLine(MsgNameHerosIs,nameArcher, nameBarbarian, nameMagician, nameDruid);
-
+                    Methods.AssignValues(ref hpArcher, ref atkArcher, ref damageReductionArcher, HpMinArcher, AtkMinArcher, DamageReductionMinArcher);
+                    Methods.AssignValues(ref hpBarbarian, ref atkBarbarian, ref damageReductionBarbarian, HpMinBarbarian, AtkMinBarbarian, DamageReductionMinBarbarian);
+                    Methods.AssignValues(ref hpMagician, ref atkMagician, ref damageReductionMagician, HpMinMagician, AtkMinMagician, DamageReductionMinMagician);
+                    Methods.AssignValues(ref hpDruid, ref atkDruid, ref damageReductionDruid, HpMinDruid, AtkMinDruid, DamageReductionMinDruid);
+                    Methods.AssignValues(ref hpMonster, ref atkMonster, ref damageReductionMonster, HpMinMonster, AtkMinMonster, DamageReductionMinMonster);
+                    Console.WriteLine(MsgAssignCharactersValuesCorrect);
+                    Console.WriteLine(MsgPressToContinue);
+                    Console.ReadKey();
+                    Console.Clear();
 
                 }
                 else if (Methods.ComprovUserOptionsAndTrys(userOption, LevelHard, trys))
                 {
+                    Console.Clear();
                     Console.WriteLine();
                     Console.WriteLine(MsgLevelChoiseHard);
                     Console.WriteLine(MsgNameHeros);
                     stringNameHeros = Console.ReadLine() ?? "";
                     Methods.AssignNameHeros(stringNameHeros, ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
                     Console.WriteLine(MsgNameHerosIs, nameArcher, nameBarbarian, nameMagician, nameDruid);
-
+                    Methods.AssignValues(ref hpArcher, ref atkArcher, ref damageReductionArcher, HpMaxArcher, AtkMaxArcher, DamageReductionMaxArcher);
+                    Methods.AssignValues(ref hpBarbarian, ref atkBarbarian, ref damageReductionBarbarian, HpMaxBarbarian, AtkMaxBarbarian, DamageReductionMaxBarbarian);
+                    Methods.AssignValues(ref hpMagician, ref atkMagician, ref damageReductionMagician, HpMaxMagician, AtkMaxMagician, DamageReductionMaxMagician);
+                    Methods.AssignValues(ref hpDruid, ref atkDruid, ref damageReductionDruid, HpMaxDruid, AtkMaxDruid, DamageReductionMaxDruid);
+                    Methods.AssignValues(ref hpMonster, ref atkMonster, ref damageReductionMonster, HpMaxMonster, AtkMaxMonster, DamageReductionMaxMonster);
+                    Console.WriteLine(MsgAssignCharactersValuesCorrect);
+                    Console.WriteLine(MsgPressToContinue);
+                    Console.ReadKey();
+                    Console.Clear();
 
                 }
                 else if (Methods.ComprovUserOptionsAndTrys(userOption, LevelCustomized, trys))
                 {
+                    Console.Clear();
                     errorMenu = false;
                     trys = 0;
                     Console.WriteLine();
@@ -435,12 +456,23 @@ namespace GameProject
                 }
                 else if (Methods.ComprovUserOptionsAndTrys(userOption, LevelRandom, trys))
                 {
+                    Console.Clear();
                     Console.WriteLine();
                     Console.WriteLine(MsgLevelChoiseRandom);
                     Console.WriteLine(MsgNameHeros);
                     stringNameHeros = Console.ReadLine() ?? "";
                     Methods.AssignNameHeros(stringNameHeros, ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
                     Console.WriteLine(MsgNameHerosIs, nameArcher, nameBarbarian, nameMagician, nameDruid);
+                    Methods.AssignValues(ref hpArcher, ref atkArcher, ref damageReductionArcher, Methods.RandomNumber(HpMinArcher,HpMaxArcher + One), Methods.RandomNumber(AtkMinArcher, AtkMaxArcher + One), Methods.RandomNumber(DamageReductionMinArcher, DamageReductionMaxArcher + One));
+                    Methods.AssignValues(ref hpBarbarian, ref atkBarbarian, ref damageReductionBarbarian, Methods.RandomNumber(HpMinBarbarian, HpMaxBarbarian + One), Methods.RandomNumber(AtkMinBarbarian, AtkMaxBarbarian + One), Methods.RandomNumber(DamageReductionMinBarbarian, DamageReductionMaxBarbarian + One));
+                    Methods.AssignValues(ref hpMagician, ref atkMagician, ref damageReductionMagician, Methods.RandomNumber(HpMinMagician, HpMaxMagician + One), Methods.RandomNumber(AtkMinMagician, AtkMaxMagician + One), Methods.RandomNumber(DamageReductionMinMagician, DamageReductionMaxMagician + One));
+                    Methods.AssignValues(ref hpDruid, ref atkDruid, ref damageReductionDruid, Methods.RandomNumber(HpMinDruid, HpMaxDruid + One), Methods.RandomNumber(AtkMinDruid, AtkMaxDruid + One), Methods.RandomNumber(DamageReductionMinDruid, DamageReductionMaxDruid + One));
+                    Methods.AssignValues(ref hpMonster, ref atkMonster, ref damageReductionMonster, Methods.RandomNumber(HpMinMonster, HpMaxMonster + One), Methods.RandomNumber(AtkMinMonster, AtkMaxMonster + One), Methods.RandomNumber(DamageReductionMinMonster, DamageReductionMaxMonster + One));
+                    Console.WriteLine(MsgAssignCharactersValuesCorrect);
+                    Console.WriteLine(MsgPressToContinue);
+                    Console.ReadKey();
+                    Console.Clear();
+
 
                 }
                 else
