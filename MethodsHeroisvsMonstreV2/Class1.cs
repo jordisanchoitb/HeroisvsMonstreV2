@@ -51,6 +51,13 @@
             }
         }
 
+        public static void AssignValues(ref double variableHp, ref double variableAtk, ref double variableReductionDamage, double valueHpCharacter, double valueAtkCharacter, double valueReductionDamageCharacter)
+        {
+            variableHp = valueHpCharacter;
+            variableAtk = valueAtkCharacter;
+            variableReductionDamage = valueReductionDamageCharacter;
+        }
+
         public static int RandomNumber(int minValue, int maxValue)
         {
             Random random = new Random();
