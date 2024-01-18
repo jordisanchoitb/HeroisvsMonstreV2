@@ -70,6 +70,7 @@ namespace GameProject
             const string MSGDeathNotHeal = "{0} esta mort per tant no es pot cura.";
             const string MSGDeathCharacter = "{0} esta morta.";
 
+            // Msg Habilitats especials
             const string MSGActionEspecialHabilityArcher = "{0} activa la seva habilitat especial i noqueja el monstre durant 2 torns (no pot atacar).";
             const string MSGActionEspecialHabilityBarbarian = "{0} activa la seva habilitat especial i durant 3 torns el valor de la seva reducció de dany serà del 100%.";
             const string MSGActionEspecialHabilityMagician = "{0} activa la seva habilitat especial, dispara una bola de foc que fa 3 cops el seu atac.";
