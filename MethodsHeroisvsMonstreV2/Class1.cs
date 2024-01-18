@@ -69,6 +69,30 @@
             return RandomNumber(1, 101) <= percProbabilitat;
         }
 
+        public static void AtkCharacter(double characterAtk,ref double characterHp, double characterReductionDamage, bool probabilitiNoHit, bool probabilitiCriticHit, string nameCharacterAtacker, string nameCharacterAtacked, string MsgAtk, string MsgFailAtk, string MsgAtkCritic)
+        {
+            double onehundred = 100;
+
+            if (probabilitiNoHit)
+            {
+                Console.WriteLine(MsgFailAtk, nameCharacterAtacker, nameCharacterAtacked);
+
+            } else
+            {
+                if (probabilitiCriticHit)
+                {
+                    Console.WriteLine(MsgAtkCritic, nameCharacterAtacker, nameCharacterAtacked, characterAtk, (characterAtk * 2) - ((characterReductionDamage / onehundred) * (characterAtk * 2)), (characterHp - (characterAtk * 2) - ((characterReductionDamage / onehundred) * (characterAtk * 2))));
+                    characterHp -= ((characterAtk * 2) - ((characterReductionDamage / onehundred) * (characterAtk * 2)));
+                    
+                } else
+                {
+                    Console.WriteLine(MsgAtk, nameCharacterAtacker, nameCharacterAtacked, characterAtk, (characterAtk * 2) - ((characterReductionDamage / onehundred) * (characterAtk * 2)), (characterHp - (characterAtk * 2) - ((characterReductionDamage / onehundred) * (characterAtk * 2))));
+                    characterHp -= (characterAtk - ((characterReductionDamage / onehundred) * characterAtk));
+
+                }
+            }
+        }
+
         public static void PrintHpHerosDesc(double hparcher, double hpbarbarian, double hpmagician, double hpdruid, string namearcher, string namebarbarian, string namemagician, string namedruid)
         {
             const string MsgHpHerosDesc = "Vida restan dels herois: ";
