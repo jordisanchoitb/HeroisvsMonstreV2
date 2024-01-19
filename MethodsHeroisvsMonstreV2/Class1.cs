@@ -92,6 +92,93 @@
                 }
             }
         }
+        public static void HealActionAll(ref double archerhp, double tmparcherhp, string namearcher, ref double barbarianhp, double tmpbarbarianhp, string namebarbarian, ref double magicianhp, double tmpmagicianhp, string namemagician, ref double druidhp, double tmpdruidhp, string namedruid, ref int cooldownhabilitydruid, string MsgDeathNotHeal)
+        {
+            string MsgAllHeal = "Tots els herois que podien ser curats, han sigut curats.";
+            string MSGActionEspecialHabilityDruid = "{0} activa la seva habilitat especial, cura la vida de tots els herois 500 punts de vida.";
+            int Maxcooldown = 5;
+
+            Console.WriteLine(MSGActionEspecialHabilityDruid, namedruid);
+            if (archerhp > 0)
+            {
+                archerhp += 500;
+                if (archerhp > tmparcherhp)
+                {
+                    archerhp = tmparcherhp;
+                }
+            } else
+            {
+                Console.WriteLine(MsgDeathNotHeal, namearcher);
+            }
+            if (barbarianhp > 0)
+            {
+                barbarianhp += 500;
+                if (barbarianhp > tmpbarbarianhp)
+                {
+                    barbarianhp = tmpbarbarianhp;
+                }
+            } else
+            {
+                Console.WriteLine(MsgDeathNotHeal, namebarbarian);
+            }
+            if (magicianhp > 0)
+            {
+                magicianhp += 500;
+                if (magicianhp > tmpmagicianhp)
+                {
+                    magicianhp = tmpmagicianhp;
+                }
+            } else
+            {
+                Console.WriteLine(MsgDeathNotHeal, namemagician);
+            }
+            if (druidhp > 0)
+            {
+                druidhp += 500;
+                if (druidhp > tmpdruidhp)
+                {
+                    druidhp = tmpdruidhp;
+                }
+            }
+            cooldownhabilitydruid = Maxcooldown;
+            Console.WriteLine(MsgAllHeal);
+
+        }
+
+        public static void StunActionHability(ref bool characterStun,ref int cooldownhabilityarcher, string namearcher)
+        {
+            string MSGActionEspecialHabilityArcher = "{0} activa la seva habilitat especial i noqueja el monstre durant 2 torns (no pot atacar).";
+            int Maxcooldown = 5;
+
+            Console.WriteLine(MSGActionEspecialHabilityArcher, namearcher);
+            characterStun = true;
+            cooldownhabilityarcher = Maxcooldown;
+        }
+
+        public static void FullReductionDamageActionHability(ref bool barbarianfullreductiondamage, ref int cooldownhabilitybarbarian, string namebarbarian)
+        {
+            string MSGActionEspecialHabilityBarbarian = "{0} activa la seva habilitat especial i durant 3 torns el valor de la seva reducció de dany serà del 100%.";
+            int Maxcooldown = 5;
+
+            Console.WriteLine(MSGActionEspecialHabilityBarbarian, namebarbarian);
+            barbarianfullreductiondamage = true;
+            cooldownhabilitybarbarian = Maxcooldown;
+        }
+
+        public static void FireBallActionHability(double characterAtk, ref double characterHp, double characterReductionDamage,ref int cooldownhabilitymagician, string namemagician, string MsgAtk)
+        {
+            string MSGActionEspecialHabilityMagician = "{0} activa la seva habilitat especial, dispara una bola de foc que fa 3 cops el seu atac.";
+            string nameCharacterAtacked = "Monstre";
+            double onehundred = 100;
+            int Maxcooldown = 5;
+            int ThreeTimeHisAttack = 3;
+
+            Console.WriteLine(MSGActionEspecialHabilityMagician, namemagician);
+            Console.WriteLine(MsgAtk, namemagician, nameCharacterAtacked, characterAtk, (characterAtk * ThreeTimeHisAttack) - ((characterReductionDamage / onehundred) * (characterAtk * ThreeTimeHisAttack)), (characterHp - (characterAtk * ThreeTimeHisAttack) - ((characterReductionDamage / onehundred) * (characterAtk * ThreeTimeHisAttack))));
+            characterHp -= ((characterAtk * ThreeTimeHisAttack) - ((characterReductionDamage / onehundred) * (characterAtk * ThreeTimeHisAttack)));
+            cooldownhabilitymagician = Maxcooldown;
+
+        }
 
         public static void ProtectActionCharacter(ref double characterReductionDamage, double tmpcharacterReductionDamage)
         {

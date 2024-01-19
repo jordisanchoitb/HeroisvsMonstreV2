@@ -68,7 +68,7 @@ namespace GameProject
             const string MsgBattleStart = "Comença la batalla";
             const string MSGAction = "Torn de {0}. Selecciona l’acció:";
             const string MSGDeathNotHeal = "{0} esta mort per tant no es pot cura.";
-            const string MSGDeathCharacter = "{0} esta morta.";
+            const string MSGDeathCharacter = "{0} esta morta, es salta el seu torn.";
 
             // Msg Habilitats especials
             const string MSGActionEspecialHabilityArcher = "{0} activa la seva habilitat especial i noqueja el monstre durant 2 torns (no pot atacar).";
