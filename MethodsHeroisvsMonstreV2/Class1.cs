@@ -93,6 +93,26 @@
             }
         }
 
+        public static string[] OrderTurnBattle()
+        {
+            string[] heros = { "Arquera", "Barbar", "Maga", "Druida" };
+            string[] herosOrder = new string[heros.Length];
+            for (int i = 0; i < heros.Length; i++)
+            {
+                int random = RandomNumber(0, heros.Length);
+                if (heros[random] != "0")
+                {
+                    herosOrder[i] = heros[random];
+                    heros[random] = "0";
+                }
+                else
+                {
+                    i--;
+                }
+            }
+            return herosOrder;
+        }
+
         public static void PrintHpHerosDesc(double hparcher, double hpbarbarian, double hpmagician, double hpdruid, string namearcher, string namebarbarian, string namemagician, string namedruid)
         {
             const string MsgHpHerosDesc = "Vida restan dels herois: ";
