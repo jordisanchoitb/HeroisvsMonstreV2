@@ -93,6 +93,19 @@
             }
         }
 
+        public static void ProtectActionCharacter(ref double characterReductionDamage, double tmpcharacterReductionDamage)
+        {
+            characterReductionDamage += tmpcharacterReductionDamage;
+        }
+        public static void ResetReductionDamageCharacter(ref double characterReductionDamage, double tmpcharacterReductionDamage)
+        {
+            if (characterReductionDamage != tmpcharacterReductionDamage)
+            {
+                characterReductionDamage -= tmpcharacterReductionDamage;
+            }
+        }
+        
+
         public static string[] OrderTurnBattle()
         {
             string[] heros = { "Arquera", "Barbar", "Maga", "Druida" };
