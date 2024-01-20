@@ -7,8 +7,8 @@
 */
 
 using System;
+using System.Threading;
 using MethodsHeroisvsMonstreV2;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GameProject
 {
@@ -21,6 +21,7 @@ namespace GameProject
             const string MsgMenu = "1. Iniciar una nova batalla\n0. Sotir";
             const string MsgError = "Error, opcio incorrecta.\nQue vols fer?";
             const string MsgExitGame = "Sortint del joc...";
+            const string MsgErrorSelectorDificult = "Error, has superat el numero de intents permesos.\nTornan al menu principal...";
             const string MsgErrorMenu = $"Error, has superat el numero de intents permesos.\n{MsgExitGame}";
             const string MsgLevelDificult = "Selecciona el nivell de dificultat:\n1. Facil\n2. Dificil\n3. Personalitzat\n4. Random";
             const string MsgLevelChoiseEasy = "Has escollit el nivell facil";
@@ -59,6 +60,7 @@ namespace GameProject
             const string MSGSetHpMonster = "Vida [7000-10000]: ";
             const string MSGSetAtkMonster = "Atac [300-400]: ";
             const string MSGSetDamageReductionMonster = "Reducció de dany (valor percentual) [20-30] %: ";
+            const string nameMonster = "Monstre";
 
             // Msg batalla
             const string MsgAtk = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep només {3} de dany. Vida restant de {1}: {4}";
@@ -68,14 +70,19 @@ namespace GameProject
             const string MsgBattleStart = "Comença la batalla";
             const string MSGAction = "Torn de {0}. Selecciona l’acció:";
             const string MSGDeathNotHeal = "{0} esta mort per tant no es pot cura.";
-            const string MSGDeathCharacter = "{0} esta morta, es salta el seu torn.";
-
-            // Msg Habilitats especials
-            const string MSGActionEspecialHabilityArcher = "{0} activa la seva habilitat especial i noqueja el monstre durant 2 torns (no pot atacar).";
-            const string MSGActionEspecialHabilityBarbarian = "{0} activa la seva habilitat especial i durant 3 torns el valor de la seva reducció de dany serà del 100%.";
-            const string MSGActionEspecialHabilityMagician = "{0} activa la seva habilitat especial, dispara una bola de foc que fa 3 cops el seu atac.";
-            const string MSGActionEspecialHabilityDruid = "{0} activa la seva habilitat especial, cura la vida de tots els herois 500 punts de vida.";
-
+            const string MsgDeathCharacterTurn = "{0} esta mort, es salta el seu torn.";
+            const string MsgDeathCharacter = "{0} es mort.";
+            const string MSGWinHeros = "El monstre a mort, han guanyat el heroes!!!!";
+            const string MSGWinMonster = "Tots els heroes han mort, ha guanyat el monstre.";
+            const string MSGActionAtk = "1. Atacar";
+            const string MSGActionProtect = "2. Protegir-se";
+            const string MSGActionEspecialHability = "3. Habilitat especial ";
+            const string MSGCooldown = "Cooldown: ";
+            const string MSGTurn = "Torn {0}:";
+            const string MSGErrorAction = "El valor introduit no es correcta. Torna a provar.";
+            const string MSGActionCountDownEqual0 = "El valor introduit no es correcta. S’han acabat els 3 intents. Es salta el torn d'aquest personatge.";
+            const string MSGErrorCooldown = "No pots utilitzar l'acció 3 ja que esta amb cooldown, fes una altre acció. ";
+            const string MSGMonsterAtkAll = "El Monstre ataca a tots els herois:";
 
             // Constants
             const int MaxTries = 3;
@@ -86,6 +93,15 @@ namespace GameProject
             const int LevelCustomized = 3;
             const int LevelRandom = 4;
             const int One = 1;
+            const int Zero = 0;
+            const int Three = 3;
+            const int Four = 4;
+            const int MaxCoolDown = 5;
+            const int ActionAtk = 1;
+            const int ActionProtection = 2;
+            const int ActionEspecialHability = 3;
+            const int ProbabilityAtkCrit = 10;
+            const int ProbabilityFailAtk = 5;
 
             /* Constantes valores Max i Min de los atributos */
             const int HpMinArcher = 1500, HpMaxArcher = 2000;
@@ -109,401 +125,775 @@ namespace GameProject
             const int DamageReductionMinMonster = 20, DamageReductionMaxMonster = 30;
 
 
+
             // Variables
             string nameArcher = "", nameBarbarian = "", nameMagician = "", nameDruid = "", stringNameHeros;
-            int userOption, trys = 0;
+            int userOption, trys = 0, battleturns, useraction=0, countdowntryAction=0;
             double inputUser;
-            bool errorMenu = false;
+            bool errorMenu = false, whilemenu=true, errorActionGame = false, errorActionCooldown3 = false;
 
             // Variables de los atributos
             double hpArcher = 0, atkArcher = 0, damageReductionArcher = 0;
+            int cooldownhabilityarcher = 0;
+            bool specialhabilityarcher = false;
+
             double hpBarbarian = 0, atkBarbarian = 0, damageReductionBarbarian = 0;
+            int cooldownhabilitybarbarian = 0;
+            bool specialhabilitybarbarian = false;
+
             double hpMagician = 0, atkMagician = 0, damageReductionMagician = 0;
+            int cooldownhabilitymagician = 0;
+
             double hpDruid = 0, atkDruid = 0, damageReductionDruid = 0;
+            int cooldownhabilitydruid = 0;
+
             double hpMonster = 0, atkMonster = 0, damageReductionMonster = 0;
+            double tmphpmaxarcher = 0, tmphpmaxbarbarian = 0, tmphpmaxmagician = 0, tmphpmaxdruid = 0;
+            double tmpdamagereductionarcher = 0, tmpdamagereductionbarbarian = 0, tmpdamagereductionmagician = 0, tmpdamagereductiondruid = 0;
 
 
             
             // Inici del programa
-            Console.WriteLine(MsgWelcome);
-            do
-            {
-                if (errorMenu)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine(MsgError);
-                }
-                Console.WriteLine(MsgMenu);
-                userOption = Convert.ToInt32(Console.ReadLine());
-                trys++;
-                errorMenu = true;
-            } while (!(userOption >= OptionExitGame && userOption <= OptionNewGame) && trys != MaxTries);
-            
-            if (Methods.ComprovUserOptionsAndTrys(userOption,OptionNewGame,trys))
+            while(whilemenu)
             {
                 Console.Clear();
-                errorMenu = false;
-                trys = 0;
+                Console.WriteLine(MsgWelcome);
                 do
                 {
-                    Console.WriteLine();
                     if (errorMenu)
                     {
+                        Console.WriteLine();
                         Console.WriteLine(MsgError);
                     }
-                    Console.WriteLine(MsgLevelDificult);
+                    Console.WriteLine(MsgMenu);
                     userOption = Convert.ToInt32(Console.ReadLine());
                     trys++;
                     errorMenu = true;
-                } while (!(userOption >= LevelEasy && userOption <= LevelRandom) && trys != MaxTries);
-
-                if (Methods.ComprovUserOptionsAndTrys(userOption, LevelEasy, trys))
-                {
-                    Console.Clear();
-                    Console.WriteLine();
-                    Console.WriteLine(MsgLevelChoiseEasy);
-                    Console.WriteLine(MsgNameHeros);
-                    stringNameHeros = Console.ReadLine() ?? "";
-                    Methods.AssignNameHeros(stringNameHeros, ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
-                    Console.WriteLine(MsgNameHerosIs,nameArcher, nameBarbarian, nameMagician, nameDruid);
-                    Methods.AssignValues(ref hpArcher, ref atkArcher, ref damageReductionArcher, HpMinArcher, AtkMinArcher, DamageReductionMinArcher);
-                    Methods.AssignValues(ref hpBarbarian, ref atkBarbarian, ref damageReductionBarbarian, HpMinBarbarian, AtkMinBarbarian, DamageReductionMinBarbarian);
-                    Methods.AssignValues(ref hpMagician, ref atkMagician, ref damageReductionMagician, HpMinMagician, AtkMinMagician, DamageReductionMinMagician);
-                    Methods.AssignValues(ref hpDruid, ref atkDruid, ref damageReductionDruid, HpMinDruid, AtkMinDruid, DamageReductionMinDruid);
-                    Methods.AssignValues(ref hpMonster, ref atkMonster, ref damageReductionMonster, HpMinMonster, AtkMinMonster, DamageReductionMinMonster);
-                    Console.WriteLine(MsgAssignCharactersValuesCorrect);
-                    Console.WriteLine(MsgPressToContinue);
-                    Console.ReadKey();
-                    Console.Clear();
-
-                }
-                else if (Methods.ComprovUserOptionsAndTrys(userOption, LevelHard, trys))
-                {
-                    Console.Clear();
-                    Console.WriteLine();
-                    Console.WriteLine(MsgLevelChoiseHard);
-                    Console.WriteLine(MsgNameHeros);
-                    stringNameHeros = Console.ReadLine() ?? "";
-                    Methods.AssignNameHeros(stringNameHeros, ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
-                    Console.WriteLine(MsgNameHerosIs, nameArcher, nameBarbarian, nameMagician, nameDruid);
-                    Methods.AssignValues(ref hpArcher, ref atkArcher, ref damageReductionArcher, HpMaxArcher, AtkMaxArcher, DamageReductionMaxArcher);
-                    Methods.AssignValues(ref hpBarbarian, ref atkBarbarian, ref damageReductionBarbarian, HpMaxBarbarian, AtkMaxBarbarian, DamageReductionMaxBarbarian);
-                    Methods.AssignValues(ref hpMagician, ref atkMagician, ref damageReductionMagician, HpMaxMagician, AtkMaxMagician, DamageReductionMaxMagician);
-                    Methods.AssignValues(ref hpDruid, ref atkDruid, ref damageReductionDruid, HpMaxDruid, AtkMaxDruid, DamageReductionMaxDruid);
-                    Methods.AssignValues(ref hpMonster, ref atkMonster, ref damageReductionMonster, HpMaxMonster, AtkMaxMonster, DamageReductionMaxMonster);
-                    Console.WriteLine(MsgAssignCharactersValuesCorrect);
-                    Console.WriteLine(MsgPressToContinue);
-                    Console.ReadKey();
-                    Console.Clear();
-
-                }
-                else if (Methods.ComprovUserOptionsAndTrys(userOption, LevelCustomized, trys))
+                } while (!(userOption >= OptionExitGame && userOption <= OptionNewGame) && trys != MaxTries);
+            
+                if (Methods.ComprovUserOptionsAndTrys(userOption,OptionNewGame,trys))
                 {
                     Console.Clear();
                     errorMenu = false;
                     trys = 0;
-                    Console.WriteLine();
-                    Console.WriteLine(MsgLevelChoiseCustomized);
-                    Console.WriteLine(MsgNameHeros);
-                    stringNameHeros = Console.ReadLine() ?? "";
-                    Methods.AssignNameHeros(stringNameHeros, ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
-                    Console.WriteLine(MsgNameHerosIs, nameArcher, nameBarbarian, nameMagician, nameDruid);
-                    Console.WriteLine(MsgPressToContinue);
-                    Console.ReadKey();
-                    Console.Clear();
-                    // Asignar valors a l'Arquera
-                    Console.WriteLine(MsgStartAssignCharactersValues);
-                    Console.WriteLine(MsgAssignCharactersArcher);
                     do
                     {
+                        Console.WriteLine();
                         if (errorMenu)
                         {
-                            Console.WriteLine();
-                            Console.WriteLine(MsgSetError, HpMinArcher, HpMaxArcher);
+                            Console.WriteLine(MsgError);
                         }
-                        Console.Write(MSGSetHpArcher);
-                        inputUser = Convert.ToDouble(Console.ReadLine());
+                        Console.WriteLine(MsgLevelDificult);
+                        userOption = Convert.ToInt32(Console.ReadLine());
                         trys++;
                         errorMenu = true;
-                    } while (!(inputUser >= HpMinArcher && inputUser <= HpMaxArcher) && trys != MaxTries);
-                    Methods.AssignValue(ref hpArcher, ref inputUser, HpMinArcher, HpMaxArcher, trys, MsgError3MaxTries);
-                    errorMenu = false;
-                    trys = 0;
-                    do
+                    } while (!(userOption >= LevelEasy && userOption <= LevelRandom) && trys != MaxTries);
+
+                    if (Methods.ComprovUserOptionsAndTrys(userOption, LevelEasy, trys))
                     {
-                        if (errorMenu)
-                        {
-                            Console.WriteLine();
-                            Console.WriteLine(MsgSetError, AtkMinArcher, AtkMaxArcher);
-                        }
-                        Console.Write(MSGSetAtkArcher);
-                        inputUser = Convert.ToDouble(Console.ReadLine());
-                        trys++;
-                        errorMenu = true;
-                    } while (!(inputUser >= AtkMinArcher && inputUser <= AtkMaxArcher) && trys != MaxTries);
-                    Methods.AssignValue(ref atkArcher, ref inputUser, AtkMinArcher, AtkMaxArcher, trys, MsgError3MaxTries);
-                    errorMenu = false;
-                    trys = 0;
-                    do
+                        Console.Clear();
+                        Console.WriteLine();
+                        Console.WriteLine(MsgLevelChoiseEasy);
+                        Console.WriteLine(MsgNameHeros);
+                        stringNameHeros = Console.ReadLine() ?? "";
+                        Methods.AssignNameHeros(stringNameHeros, ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
+                        Console.WriteLine(MsgNameHerosIs,nameArcher, nameBarbarian, nameMagician, nameDruid);
+                        Methods.AssignValues(ref hpArcher, ref atkArcher, ref damageReductionArcher, HpMaxArcher, AtkMaxArcher, DamageReductionMaxArcher);
+                        Methods.AssignValues(ref hpBarbarian, ref atkBarbarian, ref damageReductionBarbarian, HpMaxBarbarian, AtkMaxBarbarian, DamageReductionMaxBarbarian);
+                        Methods.AssignValues(ref hpMagician, ref atkMagician, ref damageReductionMagician, HpMaxMagician, AtkMaxMagician, DamageReductionMaxMagician);
+                        Methods.AssignValues(ref hpDruid, ref atkDruid, ref damageReductionDruid, HpMaxDruid, AtkMaxDruid, DamageReductionMaxDruid);
+                        Methods.AssignValues(ref hpMonster, ref atkMonster, ref damageReductionMonster, HpMinMonster, AtkMinMonster, DamageReductionMinMonster);
+                        Console.WriteLine(MsgAssignCharactersValuesCorrect);
+                        Console.WriteLine(MsgPressToContinue);
+                        Console.ReadKey();
+                        Console.Clear();
+
+                    }
+                    else if (Methods.ComprovUserOptionsAndTrys(userOption, LevelHard, trys))
                     {
-                        if (errorMenu)
-                        {
-                            Console.WriteLine();
-                            Console.WriteLine(MsgSetError, DamageReductionMinArcher, DamageReductionMaxArcher);
-                        }
-                        Console.Write(MSGSetDamageReductionArcher);
-                        inputUser = Convert.ToDouble(Console.ReadLine());
-                        trys++;
-                        errorMenu = true;
-                    } while (!(inputUser >= DamageReductionMinArcher && inputUser <= DamageReductionMaxArcher) && trys != MaxTries);
-                    Methods.AssignValue(ref damageReductionArcher, ref inputUser, DamageReductionMinArcher, DamageReductionMaxArcher, trys, MsgError3MaxTries);
-                    errorMenu = false;
-                    trys = 0;
-                    Console.WriteLine(MsgAssignCharactersValuesCorrect);
-                    Console.WriteLine(MsgPressToContinue);
-                    Console.ReadKey();
-                    Console.Clear();
-                    // Asignar valors al Barbar
-                    Console.WriteLine(MsgAssignCharactersBarbarian);
-                    do
+                        Console.Clear();
+                        Console.WriteLine();
+                        Console.WriteLine(MsgLevelChoiseHard);
+                        Console.WriteLine(MsgNameHeros);
+                        stringNameHeros = Console.ReadLine() ?? "";
+                        Methods.AssignNameHeros(stringNameHeros, ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
+                        Console.WriteLine(MsgNameHerosIs, nameArcher, nameBarbarian, nameMagician, nameDruid);
+                        Methods.AssignValues(ref hpArcher, ref atkArcher, ref damageReductionArcher, HpMinArcher, AtkMinArcher, DamageReductionMinArcher);
+                        Methods.AssignValues(ref hpBarbarian, ref atkBarbarian, ref damageReductionBarbarian, HpMinBarbarian, AtkMinBarbarian, DamageReductionMinBarbarian);
+                        Methods.AssignValues(ref hpMagician, ref atkMagician, ref damageReductionMagician, HpMinMagician, AtkMinMagician, DamageReductionMinMagician);
+                        Methods.AssignValues(ref hpDruid, ref atkDruid, ref damageReductionDruid, HpMinDruid, AtkMinDruid, DamageReductionMinDruid);
+                        Methods.AssignValues(ref hpMonster, ref atkMonster, ref damageReductionMonster, HpMaxMonster, AtkMaxMonster, DamageReductionMaxMonster);
+                        Console.WriteLine(MsgAssignCharactersValuesCorrect);
+                        Console.WriteLine(MsgPressToContinue);
+                        Console.ReadKey();
+                        Console.Clear();
+
+                    }
+                    else if (Methods.ComprovUserOptionsAndTrys(userOption, LevelCustomized, trys))
                     {
-                        if (errorMenu)
+                        Console.Clear();
+                        errorMenu = false;
+                        trys = 0;
+                        Console.WriteLine();
+                        Console.WriteLine(MsgLevelChoiseCustomized);
+                        Console.WriteLine(MsgNameHeros);
+                        stringNameHeros = Console.ReadLine() ?? "";
+                        Methods.AssignNameHeros(stringNameHeros, ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
+                        Console.WriteLine(MsgNameHerosIs, nameArcher, nameBarbarian, nameMagician, nameDruid);
+                        Console.WriteLine(MsgPressToContinue);
+                        Console.ReadKey();
+                        Console.Clear();
+                        // Asignar valors a l'Arquera
+                        Console.WriteLine(MsgStartAssignCharactersValues);
+                        Console.WriteLine(MsgAssignCharactersArcher);
+                        do
                         {
-                            Console.WriteLine();
-                            Console.WriteLine(MsgSetError, HpMinBarbarian, HpMaxBarbarian);
-                        }
-                        Console.Write(MSGSetHpBarbarian);
-                        inputUser = Convert.ToDouble(Console.ReadLine());
-                        trys++;
-                        errorMenu = true;
-                    } while (!(inputUser >= HpMinBarbarian && inputUser <= HpMaxBarbarian) && trys != MaxTries);
-                    Methods.AssignValue(ref hpBarbarian, ref inputUser, HpMinBarbarian, HpMaxBarbarian, trys, MsgError3MaxTries);
-                    errorMenu = false;
-                    trys = 0;
-                    do
-                    {
-                        if (errorMenu)
+                            if (errorMenu)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(MsgSetError, HpMinArcher, HpMaxArcher);
+                            }
+                            Console.Write(MSGSetHpArcher);
+                            inputUser = Convert.ToDouble(Console.ReadLine());
+                            trys++;
+                            errorMenu = true;
+                        } while (!(inputUser >= HpMinArcher && inputUser <= HpMaxArcher) && trys != MaxTries);
+                        Methods.AssignValue(ref hpArcher, ref inputUser, HpMinArcher, HpMaxArcher, trys, MsgError3MaxTries);
+                        errorMenu = false;
+                        trys = 0;
+                        do
                         {
-                            Console.WriteLine();
-                            Console.WriteLine(MsgSetError, AtkMinBarbarian, AtkMaxBarbarian);
-                        }
-                        Console.Write(MSGSetAtkBarbarian);
-                        inputUser = Convert.ToDouble(Console.ReadLine());
-                        trys++;
-                        errorMenu = true;
-                    } while (!(inputUser >= AtkMinBarbarian && inputUser <= AtkMaxBarbarian) && trys != MaxTries);
-                    Methods.AssignValue(ref atkBarbarian, ref inputUser, AtkMinBarbarian, AtkMaxBarbarian, trys, MsgError3MaxTries);
-                    errorMenu = false;
-                    trys = 0;
-                    do
-                    {
-                        if (errorMenu)
+                            if (errorMenu)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(MsgSetError, AtkMinArcher, AtkMaxArcher);
+                            }
+                            Console.Write(MSGSetAtkArcher);
+                            inputUser = Convert.ToDouble(Console.ReadLine());
+                            trys++;
+                            errorMenu = true;
+                        } while (!(inputUser >= AtkMinArcher && inputUser <= AtkMaxArcher) && trys != MaxTries);
+                        Methods.AssignValue(ref atkArcher, ref inputUser, AtkMinArcher, AtkMaxArcher, trys, MsgError3MaxTries);
+                        errorMenu = false;
+                        trys = 0;
+                        do
                         {
-                            Console.WriteLine();
-                            Console.WriteLine(MsgSetError, DamageReductionMinBarbarian, DamageReductionMaxBarbarian);
-                        }
-                        Console.Write(MSGSetDamageReductionBarbarian);
-                        inputUser = Convert.ToDouble(Console.ReadLine());
-                        trys++;
-                        errorMenu = true;
-                    } while (!(inputUser >= DamageReductionMinBarbarian && inputUser <= DamageReductionMaxBarbarian) && trys != MaxTries);
-                    Methods.AssignValue(ref damageReductionBarbarian, ref inputUser, DamageReductionMinBarbarian, DamageReductionMaxBarbarian, trys, MsgError3MaxTries);
-                    errorMenu = false;
-                    trys = 0;
-                    Console.WriteLine(MsgAssignCharactersValuesCorrect);
-                    Console.WriteLine(MsgPressToContinue);
-                    Console.ReadKey();
-                    Console.Clear();
-                    // Asignar valors a la Maga
-                    Console.WriteLine(MsgAssignCharactersMagician);
-                    do
-                    {
-                        if (errorMenu)
+                            if (errorMenu)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(MsgSetError, DamageReductionMinArcher, DamageReductionMaxArcher);
+                            }
+                            Console.Write(MSGSetDamageReductionArcher);
+                            inputUser = Convert.ToDouble(Console.ReadLine());
+                            trys++;
+                            errorMenu = true;
+                        } while (!(inputUser >= DamageReductionMinArcher && inputUser <= DamageReductionMaxArcher) && trys != MaxTries);
+                        Methods.AssignValue(ref damageReductionArcher, ref inputUser, DamageReductionMinArcher, DamageReductionMaxArcher, trys, MsgError3MaxTries);
+                        errorMenu = false;
+                        trys = 0;
+                        Console.WriteLine(MsgAssignCharactersValuesCorrect);
+                        Console.WriteLine(MsgPressToContinue);
+                        Console.ReadKey();
+                        Console.Clear();
+                        // Asignar valors al Barbar
+                        Console.WriteLine(MsgAssignCharactersBarbarian);
+                        do
                         {
-                            Console.WriteLine();
-                            Console.WriteLine(MsgSetError, HpMinMagician, HpMaxMagician);
-                        }
-                        Console.Write(MSGSetHpMagician);
-                        inputUser = Convert.ToDouble(Console.ReadLine());
-                        trys++;
-                        errorMenu = true;
-                    } while (!(inputUser >= HpMinMagician && inputUser <= HpMaxMagician) && trys != MaxTries);
-                    Methods.AssignValue(ref hpMagician, ref inputUser, HpMinMagician, HpMaxMagician, trys, MsgError3MaxTries);
-                    errorMenu = false;
-                    trys = 0;
-                    do
-                    {
-                        if (errorMenu)
+                            if (errorMenu)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(MsgSetError, HpMinBarbarian, HpMaxBarbarian);
+                            }
+                            Console.Write(MSGSetHpBarbarian);
+                            inputUser = Convert.ToDouble(Console.ReadLine());
+                            trys++;
+                            errorMenu = true;
+                        } while (!(inputUser >= HpMinBarbarian && inputUser <= HpMaxBarbarian) && trys != MaxTries);
+                        Methods.AssignValue(ref hpBarbarian, ref inputUser, HpMinBarbarian, HpMaxBarbarian, trys, MsgError3MaxTries);
+                        errorMenu = false;
+                        trys = 0;
+                        do
                         {
-                            Console.WriteLine();
-                            Console.WriteLine(MsgSetError, AtkMinMagician, AtkMaxMagician);
-                        }
-                        Console.Write(MSGSetAtkMagician);
-                        inputUser = Convert.ToDouble(Console.ReadLine());
-                        trys++;
-                        errorMenu = true;
-                    } while (!(inputUser >= AtkMinMagician && inputUser <= AtkMaxMagician) && trys != MaxTries);
-                    Methods.AssignValue(ref atkMagician, ref inputUser, AtkMinMagician, AtkMaxMagician, trys, MsgError3MaxTries);
-                    errorMenu = false;
-                    trys = 0;
-                    do
-                    {
-                        if (errorMenu)
+                            if (errorMenu)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(MsgSetError, AtkMinBarbarian, AtkMaxBarbarian);
+                            }
+                            Console.Write(MSGSetAtkBarbarian);
+                            inputUser = Convert.ToDouble(Console.ReadLine());
+                            trys++;
+                            errorMenu = true;
+                        } while (!(inputUser >= AtkMinBarbarian && inputUser <= AtkMaxBarbarian) && trys != MaxTries);
+                        Methods.AssignValue(ref atkBarbarian, ref inputUser, AtkMinBarbarian, AtkMaxBarbarian, trys, MsgError3MaxTries);
+                        errorMenu = false;
+                        trys = 0;
+                        do
                         {
-                            Console.WriteLine();
-                            Console.WriteLine(MsgSetError, DamageReductionMinMagician, DamageReductionMaxMagician);
-                        }
-                        Console.Write(MSGSetDamageReductionMagician);
-                        inputUser = Convert.ToDouble(Console.ReadLine());
-                        trys++;
-                        errorMenu = true;
-                    } while (!(inputUser >= DamageReductionMinMagician && inputUser <= DamageReductionMaxMagician) && trys != MaxTries);
-                    Methods.AssignValue(ref damageReductionMagician, ref inputUser, DamageReductionMinMagician, DamageReductionMaxMagician, trys, MsgError3MaxTries);
-                    errorMenu = false;
-                    trys = 0;
-                    Console.WriteLine(MsgAssignCharactersValuesCorrect);
-                    Console.WriteLine(MsgPressToContinue);
-                    Console.ReadKey();
-                    Console.Clear();
-                    // Asignar valors al Druida
-                    Console.WriteLine(MsgAssignCharactersDruid);
-                    do
-                    {
-                        if (errorMenu)
+                            if (errorMenu)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(MsgSetError, DamageReductionMinBarbarian, DamageReductionMaxBarbarian);
+                            }
+                            Console.Write(MSGSetDamageReductionBarbarian);
+                            inputUser = Convert.ToDouble(Console.ReadLine());
+                            trys++;
+                            errorMenu = true;
+                        } while (!(inputUser >= DamageReductionMinBarbarian && inputUser <= DamageReductionMaxBarbarian) && trys != MaxTries);
+                        Methods.AssignValue(ref damageReductionBarbarian, ref inputUser, DamageReductionMinBarbarian, DamageReductionMaxBarbarian, trys, MsgError3MaxTries);
+                        errorMenu = false;
+                        trys = 0;
+                        Console.WriteLine(MsgAssignCharactersValuesCorrect);
+                        Console.WriteLine(MsgPressToContinue);
+                        Console.ReadKey();
+                        Console.Clear();
+                        // Asignar valors a la Maga
+                        Console.WriteLine(MsgAssignCharactersMagician);
+                        do
                         {
-                            Console.WriteLine();
-                            Console.WriteLine(MsgSetError, HpMinDruid, HpMaxDruid);
-                        }
-                        Console.Write(MSGSetHpDruid);
-                        inputUser = Convert.ToDouble(Console.ReadLine());
-                        trys++;
-                        errorMenu = true;
-                    } while (!(inputUser >= HpMinDruid && inputUser <= HpMaxDruid) && trys != MaxTries);
-                    Methods.AssignValue(ref hpDruid, ref inputUser, HpMinDruid, HpMaxDruid, trys, MsgError3MaxTries);
-                    errorMenu = false;
-                    trys = 0;
-                    do
-                    {
-                        if (errorMenu)
+                            if (errorMenu)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(MsgSetError, HpMinMagician, HpMaxMagician);
+                            }
+                            Console.Write(MSGSetHpMagician);
+                            inputUser = Convert.ToDouble(Console.ReadLine());
+                            trys++;
+                            errorMenu = true;
+                        } while (!(inputUser >= HpMinMagician && inputUser <= HpMaxMagician) && trys != MaxTries);
+                        Methods.AssignValue(ref hpMagician, ref inputUser, HpMinMagician, HpMaxMagician, trys, MsgError3MaxTries);
+                        errorMenu = false;
+                        trys = 0;
+                        do
                         {
-                            Console.WriteLine();
-                            Console.WriteLine(MsgSetError, AtkMinDruid, AtkMaxDruid);
-                        }
-                        Console.Write(MSGSetAtkDruid);
-                        inputUser = Convert.ToDouble(Console.ReadLine());
-                        trys++;
-                        errorMenu = true;
-                    } while (!(inputUser >= AtkMinDruid && inputUser <= AtkMaxDruid) && trys != MaxTries);
-                    Methods.AssignValue(ref atkDruid, ref inputUser, AtkMinDruid, AtkMaxDruid, trys, MsgError3MaxTries);
-                    errorMenu = false;
-                    trys = 0;
-                    do
-                    {
-                        if (errorMenu)
+                            if (errorMenu)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(MsgSetError, AtkMinMagician, AtkMaxMagician);
+                            }
+                            Console.Write(MSGSetAtkMagician);
+                            inputUser = Convert.ToDouble(Console.ReadLine());
+                            trys++;
+                            errorMenu = true;
+                        } while (!(inputUser >= AtkMinMagician && inputUser <= AtkMaxMagician) && trys != MaxTries);
+                        Methods.AssignValue(ref atkMagician, ref inputUser, AtkMinMagician, AtkMaxMagician, trys, MsgError3MaxTries);
+                        errorMenu = false;
+                        trys = 0;
+                        do
                         {
-                            Console.WriteLine();
-                            Console.WriteLine(MsgSetError, DamageReductionMinDruid, DamageReductionMaxDruid);
-                        }
-                        Console.Write(MSGSetDamageReductionDruid);
-                        inputUser = Convert.ToDouble(Console.ReadLine());
-                        trys++;
-                        errorMenu = true;
-                    } while (!(inputUser >= DamageReductionMinDruid && inputUser <= DamageReductionMaxDruid) && trys != MaxTries);
-                    Methods.AssignValue(ref damageReductionDruid, ref inputUser, DamageReductionMinDruid, DamageReductionMaxDruid, trys, MsgError3MaxTries);
-                    errorMenu = false;
-                    trys = 0;
-                    Console.WriteLine(MsgAssignCharactersValuesCorrect);
-                    Console.WriteLine(MsgPressToContinue);
-                    Console.ReadKey();
-                    Console.Clear();
-                    // Asignar valors al Monstre
-                    Console.WriteLine(MsgAssignCharactersMonstre);
-                    do
-                    {
-                        if (errorMenu)
+                            if (errorMenu)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(MsgSetError, DamageReductionMinMagician, DamageReductionMaxMagician);
+                            }
+                            Console.Write(MSGSetDamageReductionMagician);
+                            inputUser = Convert.ToDouble(Console.ReadLine());
+                            trys++;
+                            errorMenu = true;
+                        } while (!(inputUser >= DamageReductionMinMagician && inputUser <= DamageReductionMaxMagician) && trys != MaxTries);
+                        Methods.AssignValue(ref damageReductionMagician, ref inputUser, DamageReductionMinMagician, DamageReductionMaxMagician, trys, MsgError3MaxTries);
+                        errorMenu = false;
+                        trys = 0;
+                        Console.WriteLine(MsgAssignCharactersValuesCorrect);
+                        Console.WriteLine(MsgPressToContinue);
+                        Console.ReadKey();
+                        Console.Clear();
+                        // Asignar valors al Druida
+                        Console.WriteLine(MsgAssignCharactersDruid);
+                        do
                         {
-                            Console.WriteLine();
-                            Console.WriteLine(MsgSetError, HpMinMonster, HpMaxMonster);
-                        }
-                        Console.Write(MSGSetHpMonster);
-                        inputUser = Convert.ToDouble(Console.ReadLine());
-                        trys++;
-                        errorMenu = true;
-                    } while (!(inputUser >= HpMinMonster && inputUser <= HpMaxMonster) && trys != MaxTries);
-                    Methods.AssignValue(ref hpMonster, ref inputUser, HpMinMonster, HpMaxMonster, trys, MsgError3MaxTries);
-                    errorMenu = false;
-                    trys = 0;
-                    do
-                    {
-                        if (errorMenu)
+                            if (errorMenu)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(MsgSetError, HpMinDruid, HpMaxDruid);
+                            }
+                            Console.Write(MSGSetHpDruid);
+                            inputUser = Convert.ToDouble(Console.ReadLine());
+                            trys++;
+                            errorMenu = true;
+                        } while (!(inputUser >= HpMinDruid && inputUser <= HpMaxDruid) && trys != MaxTries);
+                        Methods.AssignValue(ref hpDruid, ref inputUser, HpMinDruid, HpMaxDruid, trys, MsgError3MaxTries);
+                        errorMenu = false;
+                        trys = 0;
+                        do
                         {
-                            Console.WriteLine();
-                            Console.WriteLine(MsgSetError, AtkMinMonster, AtkMaxMonster);
-                        }
-                        Console.Write(MSGSetAtkMonster);
-                        inputUser = Convert.ToDouble(Console.ReadLine());
-                        trys++;
-                        errorMenu = true;
-                    } while (!(inputUser >= AtkMinMonster && inputUser <= AtkMaxMonster) && trys != MaxTries);
-                    Methods.AssignValue(ref atkMonster, ref inputUser, AtkMinMonster, AtkMaxMonster, trys, MsgError3MaxTries);
-                    errorMenu = false;
-                    trys = 0;
-                    do
-                    {
-                        if (errorMenu)
+                            if (errorMenu)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(MsgSetError, AtkMinDruid, AtkMaxDruid);
+                            }
+                            Console.Write(MSGSetAtkDruid);
+                            inputUser = Convert.ToDouble(Console.ReadLine());
+                            trys++;
+                            errorMenu = true;
+                        } while (!(inputUser >= AtkMinDruid && inputUser <= AtkMaxDruid) && trys != MaxTries);
+                        Methods.AssignValue(ref atkDruid, ref inputUser, AtkMinDruid, AtkMaxDruid, trys, MsgError3MaxTries);
+                        errorMenu = false;
+                        trys = 0;
+                        do
                         {
-                            Console.WriteLine();
-                            Console.WriteLine(MsgSetError, DamageReductionMinMonster, DamageReductionMaxMonster);
-                        }
-                        Console.Write(MSGSetDamageReductionMonster);
-                        inputUser = Convert.ToDouble(Console.ReadLine());
-                        trys++;
-                        errorMenu = true;
-                    } while (!(inputUser >= DamageReductionMinMonster && inputUser <= DamageReductionMaxMonster) && trys != MaxTries);
-                    Methods.AssignValue(ref damageReductionMonster, ref inputUser, DamageReductionMinMonster, DamageReductionMaxMonster, trys, MsgError3MaxTries);
-                    Console.WriteLine(MsgAssignCharactersValuesCorrect);
-                    Console.WriteLine(MsgPressToContinue);
-                    Console.ReadKey();
-                    Console.Clear();
-                    Console.WriteLine();
+                            if (errorMenu)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(MsgSetError, DamageReductionMinDruid, DamageReductionMaxDruid);
+                            }
+                            Console.Write(MSGSetDamageReductionDruid);
+                            inputUser = Convert.ToDouble(Console.ReadLine());
+                            trys++;
+                            errorMenu = true;
+                        } while (!(inputUser >= DamageReductionMinDruid && inputUser <= DamageReductionMaxDruid) && trys != MaxTries);
+                        Methods.AssignValue(ref damageReductionDruid, ref inputUser, DamageReductionMinDruid, DamageReductionMaxDruid, trys, MsgError3MaxTries);
+                        errorMenu = false;
+                        trys = 0;
+                        Console.WriteLine(MsgAssignCharactersValuesCorrect);
+                        Console.WriteLine(MsgPressToContinue);
+                        Console.ReadKey();
+                        Console.Clear();
+                        // Asignar valors al Monstre
+                        Console.WriteLine(MsgAssignCharactersMonstre);
+                        do
+                        {
+                            if (errorMenu)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(MsgSetError, HpMinMonster, HpMaxMonster);
+                            }
+                            Console.Write(MSGSetHpMonster);
+                            inputUser = Convert.ToDouble(Console.ReadLine());
+                            trys++;
+                            errorMenu = true;
+                        } while (!(inputUser >= HpMinMonster && inputUser <= HpMaxMonster) && trys != MaxTries);
+                        Methods.AssignValue(ref hpMonster, ref inputUser, HpMinMonster, HpMaxMonster, trys, MsgError3MaxTries);
+                        errorMenu = false;
+                        trys = 0;
+                        do
+                        {
+                            if (errorMenu)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(MsgSetError, AtkMinMonster, AtkMaxMonster);
+                            }
+                            Console.Write(MSGSetAtkMonster);
+                            inputUser = Convert.ToDouble(Console.ReadLine());
+                            trys++;
+                            errorMenu = true;
+                        } while (!(inputUser >= AtkMinMonster && inputUser <= AtkMaxMonster) && trys != MaxTries);
+                        Methods.AssignValue(ref atkMonster, ref inputUser, AtkMinMonster, AtkMaxMonster, trys, MsgError3MaxTries);
+                        errorMenu = false;
+                        trys = 0;
+                        do
+                        {
+                            if (errorMenu)
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine(MsgSetError, DamageReductionMinMonster, DamageReductionMaxMonster);
+                            }
+                            Console.Write(MSGSetDamageReductionMonster);
+                            inputUser = Convert.ToDouble(Console.ReadLine());
+                            trys++;
+                            errorMenu = true;
+                        } while (!(inputUser >= DamageReductionMinMonster && inputUser <= DamageReductionMaxMonster) && trys != MaxTries);
+                        Methods.AssignValue(ref damageReductionMonster, ref inputUser, DamageReductionMinMonster, DamageReductionMaxMonster, trys, MsgError3MaxTries);
+                        Console.WriteLine(MsgAssignCharactersValuesCorrect);
+                        Console.WriteLine(MsgPressToContinue);
+                        Console.ReadKey();
+                        Console.Clear();
+                        Console.WriteLine();
 
                                        
 
 
-                }
-                else if (Methods.ComprovUserOptionsAndTrys(userOption, LevelRandom, trys))
-                {
-                    Console.Clear();
+                    }
+                    else if (Methods.ComprovUserOptionsAndTrys(userOption, LevelRandom, trys))
+                    {
+                        Console.Clear();
+                        Console.WriteLine();
+                        Console.WriteLine(MsgLevelChoiseRandom);
+                        Console.WriteLine(MsgNameHeros);
+                        stringNameHeros = Console.ReadLine() ?? "";
+                        Methods.AssignNameHeros(stringNameHeros, ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
+                        Console.WriteLine(MsgNameHerosIs, nameArcher, nameBarbarian, nameMagician, nameDruid);
+                        Methods.AssignValues(ref hpArcher, ref atkArcher, ref damageReductionArcher, Methods.RandomNumber(HpMinArcher,HpMaxArcher + One), Methods.RandomNumber(AtkMinArcher, AtkMaxArcher + One), Methods.RandomNumber(DamageReductionMinArcher, DamageReductionMaxArcher + One));
+                        Methods.AssignValues(ref hpBarbarian, ref atkBarbarian, ref damageReductionBarbarian, Methods.RandomNumber(HpMinBarbarian, HpMaxBarbarian + One), Methods.RandomNumber(AtkMinBarbarian, AtkMaxBarbarian + One), Methods.RandomNumber(DamageReductionMinBarbarian, DamageReductionMaxBarbarian + One));
+                        Methods.AssignValues(ref hpMagician, ref atkMagician, ref damageReductionMagician, Methods.RandomNumber(HpMinMagician, HpMaxMagician + One), Methods.RandomNumber(AtkMinMagician, AtkMaxMagician + One), Methods.RandomNumber(DamageReductionMinMagician, DamageReductionMaxMagician + One));
+                        Methods.AssignValues(ref hpDruid, ref atkDruid, ref damageReductionDruid, Methods.RandomNumber(HpMinDruid, HpMaxDruid + One), Methods.RandomNumber(AtkMinDruid, AtkMaxDruid + One), Methods.RandomNumber(DamageReductionMinDruid, DamageReductionMaxDruid + One));
+                        Methods.AssignValues(ref hpMonster, ref atkMonster, ref damageReductionMonster, Methods.RandomNumber(HpMinMonster, HpMaxMonster + One), Methods.RandomNumber(AtkMinMonster, AtkMaxMonster + One), Methods.RandomNumber(DamageReductionMinMonster, DamageReductionMaxMonster + One));
+                        Console.WriteLine(MsgAssignCharactersValuesCorrect);
+                        Console.WriteLine(MsgPressToContinue);
+                        Console.ReadKey();
+                        Console.Clear();
+                    }
+                    else
+                    {
+                        Console.WriteLine(MsgErrorSelectorDificult);
+                        Console.WriteLine(MsgPressToContinue);
+                        Console.ReadKey();
+                        Console.Clear();
+                    }
+                    battleturns = One;
+                    tmpdamagereductionarcher = damageReductionArcher;
+                    tmpdamagereductionbarbarian = damageReductionBarbarian;
+                    tmpdamagereductionmagician = damageReductionMagician;
+                    tmpdamagereductiondruid = damageReductionDruid;
+                    tmphpmaxarcher = hpArcher;
+                    tmphpmaxbarbarian = hpBarbarian;
+                    tmphpmaxmagician = hpMagician;
+                    tmphpmaxdruid = hpDruid;
+
+                    Console.WriteLine(MsgBattleStart);
                     Console.WriteLine();
-                    Console.WriteLine(MsgLevelChoiseRandom);
-                    Console.WriteLine(MsgNameHeros);
-                    stringNameHeros = Console.ReadLine() ?? "";
-                    Methods.AssignNameHeros(stringNameHeros, ref nameArcher, ref nameBarbarian, ref nameMagician, ref nameDruid);
-                    Console.WriteLine(MsgNameHerosIs, nameArcher, nameBarbarian, nameMagician, nameDruid);
-                    Methods.AssignValues(ref hpArcher, ref atkArcher, ref damageReductionArcher, Methods.RandomNumber(HpMinArcher,HpMaxArcher + One), Methods.RandomNumber(AtkMinArcher, AtkMaxArcher + One), Methods.RandomNumber(DamageReductionMinArcher, DamageReductionMaxArcher + One));
-                    Methods.AssignValues(ref hpBarbarian, ref atkBarbarian, ref damageReductionBarbarian, Methods.RandomNumber(HpMinBarbarian, HpMaxBarbarian + One), Methods.RandomNumber(AtkMinBarbarian, AtkMaxBarbarian + One), Methods.RandomNumber(DamageReductionMinBarbarian, DamageReductionMaxBarbarian + One));
-                    Methods.AssignValues(ref hpMagician, ref atkMagician, ref damageReductionMagician, Methods.RandomNumber(HpMinMagician, HpMaxMagician + One), Methods.RandomNumber(AtkMinMagician, AtkMaxMagician + One), Methods.RandomNumber(DamageReductionMinMagician, DamageReductionMaxMagician + One));
-                    Methods.AssignValues(ref hpDruid, ref atkDruid, ref damageReductionDruid, Methods.RandomNumber(HpMinDruid, HpMaxDruid + One), Methods.RandomNumber(AtkMinDruid, AtkMaxDruid + One), Methods.RandomNumber(DamageReductionMinDruid, DamageReductionMaxDruid + One));
-                    Methods.AssignValues(ref hpMonster, ref atkMonster, ref damageReductionMonster, Methods.RandomNumber(HpMinMonster, HpMaxMonster + One), Methods.RandomNumber(AtkMinMonster, AtkMaxMonster + One), Methods.RandomNumber(DamageReductionMinMonster, DamageReductionMaxMonster + One));
-                    Console.WriteLine(MsgAssignCharactersValuesCorrect);
-                    Console.WriteLine(MsgPressToContinue);
-                    Console.ReadKey();
-                    Console.Clear();
+                    while (!(hpArcher <= Zero && hpBarbarian <= Zero && hpDruid <= Zero && hpMagician <= Zero || hpMonster <= Zero))
+                    {
+                        string[] OrderTurns = Methods.OrderTurnBattle();
+                        int turns = OrderTurns.Length;
+                        int iterations = 0;
+                        while (iterations < turns && !(hpArcher <= Zero && hpBarbarian <= Zero && hpDruid <= Zero && hpMagician <= Zero || hpMonster <= Zero))
+                        {
+                            countdowntryAction = Three;
+                            errorActionGame = false;
+                            errorActionCooldown3 = false;
+                            Console.WriteLine(MSGTurn, battleturns);
+                            Console.WriteLine();
+                            Methods.PrintHpHerosDesc(hpArcher, hpBarbarian, hpMagician, hpDruid, nameArcher, nameBarbarian, nameMagician, nameDruid);
+                            Console.WriteLine();
+                            switch(OrderTurns[iterations])
+                            {
+                                case "Arquera":
+                                    if (hpArcher > Zero)
+                                    {
+                                        do
+                                        {
+                                            if (useraction == Three && cooldownhabilityarcher >= One && cooldownhabilityarcher <= MaxCoolDown && errorActionCooldown3)
+                                            {
+                                                Console.WriteLine();
+                                                Console.WriteLine(MSGErrorCooldown);
 
+                                            }
+                                            else if (errorActionGame)
+                                            {
+                                                Console.WriteLine();
+                                                Console.WriteLine(MSGErrorAction);
+                                            }
+                                            Console.WriteLine(MSGAction, nameArcher);
+                                            Console.WriteLine(MSGActionAtk);
+                                            Console.WriteLine(MSGActionProtect);
+                                            if (cooldownhabilityarcher == Zero)
+                                            {
+                                                Console.WriteLine(MSGActionEspecialHability);
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine(MSGActionEspecialHability + MSGCooldown + cooldownhabilityarcher);
+                                            }
+                                            useraction = Convert.ToInt32(Console.ReadLine());
+                                            errorActionGame = true;
+                                            errorActionCooldown3 = true;
+                                            countdowntryAction--;
+                                        } while ((!(useraction >= One && useraction <= Three) || (useraction == ActionEspecialHability && cooldownhabilityarcher != Zero)) && countdowntryAction != Zero);
+                                        if (useraction == ActionAtk)
+                                        {
+                                            Methods.AtkCharacter(atkArcher, ref hpMonster, damageReductionMonster, Methods.Probability(ProbabilityFailAtk), Methods.Probability(ProbabilityAtkCrit), nameArcher, nameMonster,MsgAtk,MsgFailAtk,MsgAtkCrit);
+                                            if (cooldownhabilityarcher > Zero)
+                                            {
+                                                cooldownhabilityarcher--;
+                                            }
+                                        } else if (useraction == ActionProtection)
+                                        {
+                                            Methods.ProtectActionCharacter(ref damageReductionArcher, tmpdamagereductionarcher);
+                                            if (cooldownhabilityarcher > Zero)
+                                            {
+                                                cooldownhabilityarcher--;
+                                            }
+                                        } else if (useraction == ActionEspecialHability && cooldownhabilityarcher == Zero)
+                                        {
+                                            Methods.StunActionHability(ref specialhabilityarcher, ref cooldownhabilityarcher, nameArcher);
+                                        } else
+                                        {
+                                            Console.WriteLine(MSGActionCountDownEqual0);
+                                        }
+                                    } else
+                                    {
+                                        Console.WriteLine(MsgDeathCharacterTurn, nameArcher);
+                                    }
+                                    Console.WriteLine(MsgPressToContinue);
+                                    Console.ReadKey();
+                                    Console.Clear();
+                                    break;
+                                case "Barbar":
+                                    if (hpBarbarian > Zero)
+                                    {
+                                        do
+                                        {
+                                            if (useraction == Three && cooldownhabilitybarbarian >= One && cooldownhabilitybarbarian <= MaxCoolDown && errorActionCooldown3)
+                                            {
+                                                Console.WriteLine();
+                                                Console.WriteLine(MSGErrorCooldown);
 
+                                            }
+                                            else if (errorActionGame)
+                                            {
+                                                Console.WriteLine();
+                                                Console.WriteLine(MSGErrorAction);
+                                            }
+                                            Console.WriteLine(MSGAction, nameBarbarian);
+                                            Console.WriteLine(MSGActionAtk);
+                                            Console.WriteLine(MSGActionProtect);
+                                            if (cooldownhabilitybarbarian == Zero)
+                                            {
+                                                Console.WriteLine(MSGActionEspecialHability);
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine(MSGActionEspecialHability + MSGCooldown + cooldownhabilitybarbarian);
+                                            }
+                                            useraction = Convert.ToInt32(Console.ReadLine());
+                                            errorActionGame = true;
+                                            errorActionCooldown3 = true;
+                                            countdowntryAction--;
+                                        } while ((!(useraction >= One && useraction <= Three) || (useraction == ActionEspecialHability && cooldownhabilityarcher != Zero)) && countdowntryAction != Zero);
+                                        if (useraction == ActionAtk)
+                                        {
+                                            Methods.AtkCharacter(atkBarbarian, ref hpMonster, damageReductionMonster, Methods.Probability(ProbabilityFailAtk), Methods.Probability(ProbabilityAtkCrit), nameBarbarian, nameMonster, MsgAtk, MsgFailAtk, MsgAtkCrit);
+                                            if (cooldownhabilitybarbarian > Zero)
+                                            {
+                                                cooldownhabilitybarbarian--;
+                                            }
+                                        }
+                                        else if (useraction == ActionProtection)
+                                        {
+                                            Methods.ProtectActionCharacter(ref damageReductionBarbarian, tmpdamagereductionbarbarian);
+                                            if (cooldownhabilitybarbarian > Zero)
+                                            {
+                                                cooldownhabilitybarbarian--;
+                                            }
+                                        }
+                                        else if (useraction == ActionEspecialHability && cooldownhabilitybarbarian == Zero)
+                                        {
+                                            Methods.FullReductionDamageActionHability(ref specialhabilitybarbarian, ref cooldownhabilitybarbarian, nameBarbarian);
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine(MSGActionCountDownEqual0);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine(MsgDeathCharacterTurn, nameBarbarian);
+                                    }
+                                    Console.WriteLine(MsgPressToContinue);
+                                    Console.ReadKey();
+                                    Console.Clear();
+                                    break;
+                                case "Maga":
+                                    if (hpMagician > Zero)
+                                    {
+                                        do
+                                        {
+                                            if (useraction == Three && cooldownhabilitymagician >= One && cooldownhabilitymagician <= MaxCoolDown && errorActionCooldown3)
+                                            {
+                                                Console.WriteLine();
+                                                Console.WriteLine(MSGErrorCooldown);
+
+                                            }
+                                            else if (errorActionGame)
+                                            {
+                                                Console.WriteLine();
+                                                Console.WriteLine(MSGErrorAction);
+                                            }
+                                            Console.WriteLine(MSGAction, nameMagician);
+                                            Console.WriteLine(MSGActionAtk);
+                                            Console.WriteLine(MSGActionProtect);
+                                            if (cooldownhabilitymagician == Zero)
+                                            {
+                                                Console.WriteLine(MSGActionEspecialHability);
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine(MSGActionEspecialHability + MSGCooldown + cooldownhabilitymagician);
+                                            }
+                                            useraction = Convert.ToInt32(Console.ReadLine());
+                                            errorActionGame = true;
+                                            errorActionCooldown3 = true;
+                                            countdowntryAction--;
+                                        } while ((!(useraction >= One && useraction <= Three) || (useraction == ActionEspecialHability && cooldownhabilityarcher != Zero)) && countdowntryAction != Zero);
+                                        if (useraction == ActionAtk)
+                                        {
+                                            Methods.AtkCharacter(atkMagician, ref hpMonster, damageReductionMonster, Methods.Probability(ProbabilityFailAtk), Methods.Probability(ProbabilityAtkCrit), nameMagician, nameMonster, MsgAtk, MsgFailAtk, MsgAtkCrit);
+                                            if (cooldownhabilitymagician > Zero)
+                                            {
+                                                cooldownhabilitymagician--;
+                                            }
+                                        }
+                                        else if (useraction == ActionProtection)
+                                        {
+                                            Methods.ProtectActionCharacter(ref damageReductionMagician, tmpdamagereductionmagician);
+                                            if (cooldownhabilitymagician > Zero)
+                                            {
+                                                cooldownhabilitymagician--;
+                                            }
+                                        }
+                                        else if (useraction == ActionEspecialHability && cooldownhabilitymagician == Zero)
+                                        {
+                                            Methods.FireBallActionHability(atkMagician, ref hpMonster, damageReductionMonster, ref cooldownhabilitymagician, nameMagician, MsgAtk);
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine(MSGActionCountDownEqual0);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine(MsgDeathCharacterTurn, nameMagician);
+                                    }
+                                    Console.WriteLine(MsgPressToContinue);
+                                    Console.ReadKey();
+                                    Console.Clear();
+                                    break;
+                                case "Druida":
+                                    if (hpDruid > Zero)
+                                    {
+                                        do
+                                        {
+                                            if (useraction == Three && cooldownhabilitydruid >= One && cooldownhabilitydruid <= MaxCoolDown && errorActionCooldown3)
+                                            {
+                                                Console.WriteLine();
+                                                Console.WriteLine(MSGErrorCooldown);
+
+                                            }
+                                            else if (errorActionGame)
+                                            {
+                                                Console.WriteLine();
+                                                Console.WriteLine(MSGErrorAction);
+                                            }
+                                            Console.WriteLine(MSGAction, nameDruid);
+                                            Console.WriteLine(MSGActionAtk);
+                                            Console.WriteLine(MSGActionProtect);
+                                            if (cooldownhabilitydruid == Zero)
+                                            {
+                                                Console.WriteLine(MSGActionEspecialHability);
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine(MSGActionEspecialHability + MSGCooldown + cooldownhabilitydruid);
+                                            }
+                                            useraction = Convert.ToInt32(Console.ReadLine());
+                                            errorActionGame = true;
+                                            errorActionCooldown3 = true;
+                                            countdowntryAction--;
+                                        } while ((!(useraction >= One && useraction <= Three) || (useraction == ActionEspecialHability && cooldownhabilityarcher != Zero)) && countdowntryAction != Zero);
+                                        if (useraction == ActionAtk)
+                                        {
+                                            Methods.AtkCharacter(atkDruid, ref hpMonster, damageReductionMonster, Methods.Probability(ProbabilityFailAtk), Methods.Probability(ProbabilityAtkCrit), nameDruid, nameMonster, MsgAtk, MsgFailAtk, MsgAtkCrit);
+                                            if (cooldownhabilitydruid > Zero)
+                                            {
+                                                cooldownhabilitydruid--;
+                                            }
+                                        }
+                                        else if (useraction == ActionProtection)
+                                        {
+                                            Methods.ProtectActionCharacter(ref damageReductionDruid, tmpdamagereductiondruid);
+                                            if (cooldownhabilitydruid > Zero)
+                                            {
+                                                cooldownhabilitydruid--;
+                                            }
+                                        }
+                                        else if (useraction == ActionEspecialHability && cooldownhabilitydruid == Zero)
+                                        {
+                                            Methods.HealActionAll(ref hpArcher, tmphpmaxarcher, nameArcher, ref hpBarbarian , tmphpmaxbarbarian, nameBarbarian, ref hpMagician, tmphpmaxmagician, nameMagician, ref hpDruid, tmphpmaxdruid, nameDruid, ref cooldownhabilitydruid, MSGDeathNotHeal);
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine(MSGActionCountDownEqual0);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine(MsgDeathCharacterTurn, nameDruid);
+                                    }
+                                    Console.WriteLine(MsgPressToContinue);
+                                    Console.ReadKey();
+                                    Console.Clear();
+                                    break;
+                                
+                            }
+                            iterations++;
+                        }
+                        // Ataca el monstre
+                        if (hpMonster > Zero && !(specialhabilityarcher))
+                        {
+                            Console.Clear();
+                            Console.WriteLine(MSGMonsterAtkAll);
+                            if (hpArcher > Zero)
+                            {
+                                Methods.AtkCharacter(atkMonster, ref hpArcher, damageReductionArcher, nameMonster, nameArcher, MsgAtk);
+                            }
+                            else
+                            {
+                                Console.WriteLine("");
+                                Console.WriteLine(MsgDeathCharacter, nameArcher);
+                            }
+                            if (hpBarbarian > Zero)
+                            {
+                                Methods.AtkCharacter(atkMonster, ref hpBarbarian, damageReductionBarbarian, nameMonster, nameBarbarian, MsgAtk);
+                            }
+                            else
+                            {
+                                Console.WriteLine("");
+                                Console.WriteLine(MsgDeathCharacter, nameBarbarian);
+                            }
+                            if (hpMagician > Zero)
+                            {
+                                Methods.AtkCharacter(atkMonster, ref hpMagician, damageReductionMagician, nameMonster, nameMagician, MsgAtk);
+                            }
+                            else
+                            {
+                                Console.WriteLine("");
+                                Console.WriteLine(MsgDeathCharacter, nameMagician);
+                            }
+                            if (hpDruid > Zero)
+                            {
+                                Methods.AtkCharacter(atkMonster, ref hpDruid, damageReductionDruid, nameMonster, nameDruid, MsgAtk);
+                            }
+                            else
+                            {
+                                Console.WriteLine("");
+                                Console.WriteLine(MsgDeathCharacter, nameDruid);
+                            }
+                        }
+                        // Comprova quant cooldown tenen les habilitats especial per treuralis de activas en cas de estarlo
+                        Methods.ResetSpecialHability(ref specialhabilityarcher, cooldownhabilityarcher, Four);
+                        Methods.ResetSpecialHability(ref specialhabilitybarbarian, cooldownhabilitybarbarian, Three);
+
+                        // Comprova si hi ha algun heroi que ha utilitzat la accio 2 i si es aixi torna a posar el valor de la reduccio de dany al valor que tenia abans de utilitzar la accio 2
+                        Methods.ResetReductionDamageCharacter(ref damageReductionArcher, tmpdamagereductionarcher);
+                        Methods.ResetReductionDamageCharacter(ref damageReductionBarbarian, tmpdamagereductionbarbarian);
+                        Methods.ResetReductionDamageCharacter(ref damageReductionMagician, tmpdamagereductionmagician);
+                        Methods.ResetReductionDamageCharacter(ref damageReductionDruid, tmpdamagereductiondruid);
+                        battleturns++;
+                    }
+                    if (hpMonster <= Zero)
+                    {
+                        Console.WriteLine(MSGWinHeros);
+                        Console.WriteLine(MsgPressToContinue);
+                        Console.ReadKey();
+                        Console.Clear();
+                    } else
+                    {
+                        Console.WriteLine(MSGWinMonster);
+                        Console.WriteLine(MsgPressToContinue);
+                        Console.ReadKey();
+                        Console.Clear();
+                    }
+                }
+                else if (userOption == OptionExitGame)
+                {
+                    Console.WriteLine(MsgExitGame);
+                    whilemenu = false;
                 }
                 else
                 {
                     Console.WriteLine(MsgErrorMenu);
+                    whilemenu = false;
                 }
-            }
-            else if (userOption == OptionExitGame)
-            {
-                Console.WriteLine(MsgExitGame);
-            }
-            else
-            {
-                Console.WriteLine(MsgErrorMenu);
             }
         }
     }

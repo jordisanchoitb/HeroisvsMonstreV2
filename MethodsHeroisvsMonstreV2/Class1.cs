@@ -1,4 +1,6 @@
-﻿namespace MethodsHeroisvsMonstreV2
+﻿using System.Threading;
+
+namespace MethodsHeroisvsMonstreV2
 {
     public static class Methods
     {
@@ -86,12 +88,20 @@
                     
                 } else
                 {
-                    Console.WriteLine(MsgAtk, nameCharacterAtacker, nameCharacterAtacked, characterAtk, (characterAtk * 2) - ((characterReductionDamage / onehundred) * (characterAtk * 2)), (characterHp - (characterAtk * 2) - ((characterReductionDamage / onehundred) * (characterAtk * 2))));
+                    Console.WriteLine(MsgAtk, nameCharacterAtacker, nameCharacterAtacked, characterAtk, (characterAtk) - ((characterReductionDamage / onehundred) * (characterAtk)), (characterHp - (characterAtk) - ((characterReductionDamage / onehundred) * (characterAtk))));
                     characterHp -= (characterAtk - ((characterReductionDamage / onehundred) * characterAtk));
 
                 }
             }
         }
+
+        public static void AtkCharacter(double characterAtk, ref double characterHp, double characterReductionDamage, string nameCharacterAtacker, string nameCharacterAtacked, string MsgAtk)
+        {
+            double onehundred = 100;
+            Console.WriteLine(MsgAtk, nameCharacterAtacker, nameCharacterAtacked, characterAtk, (characterAtk) - ((characterReductionDamage / onehundred) * (characterAtk)), (characterHp - (characterAtk) - ((characterReductionDamage / onehundred) * (characterAtk))));
+            characterHp -= (characterAtk - ((characterReductionDamage / onehundred) * characterAtk));
+        }
+
         public static void HealActionAll(ref double archerhp, double tmparcherhp, string namearcher, ref double barbarianhp, double tmpbarbarianhp, string namebarbarian, ref double magicianhp, double tmpmagicianhp, string namemagician, ref double druidhp, double tmpdruidhp, string namedruid, ref int cooldownhabilitydruid, string MsgDeathNotHeal)
         {
             string MsgAllHeal = "Tots els herois que podien ser curats, han sigut curats.";
@@ -178,6 +188,14 @@
             characterHp -= ((characterAtk * ThreeTimeHisAttack) - ((characterReductionDamage / onehundred) * (characterAtk * ThreeTimeHisAttack)));
             cooldownhabilitymagician = Maxcooldown;
 
+        }
+
+        public static void ResetSpecialHability(ref bool specialhabilitycharacter, int cooldownhabilitycharacter, int numturndesactivate)
+        {
+            if (specialhabilitycharacter && cooldownhabilitycharacter == numturndesactivate)
+            {
+                specialhabilitycharacter = false;
+            }
         }
 
         public static void ProtectActionCharacter(ref double characterReductionDamage, double tmpcharacterReductionDamage)
