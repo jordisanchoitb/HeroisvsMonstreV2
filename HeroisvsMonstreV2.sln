@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeroisvsMonstreV2", "HeroisvsMonstreV2\HeroisvsMonstreV2.csproj", "{01D3C953-7ACE-4BF3-8994-4DC3BD546E03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeroisvsMonstreV2", "HeroisvsMonstreV2\HeroisvsMonstreV2.csproj", "{01D3C953-7ACE-4BF3-8994-4DC3BD546E03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHeroisvsMonstreV2", "TestHeroisvsMonstreV2\TestHeroisvsMonstreV2.csproj", "{90E07085-1FA8-4F5A-89E8-6452E4547735}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MethodsHeroisvsMonstreV2", "MethodsHeroisvsMonstreV2\MethodsHeroisvsMonstreV2.csproj", "{524EA207-4C39-4D27-8E05-092378221720}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MethodsHeroisvsMonstreV2", "MethodsHeroisvsMonstreV2\MethodsHeroisvsMonstreV2.csproj", "{524EA207-4C39-4D27-8E05-092378221720}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		{01D3C953-7ACE-4BF3-8994-4DC3BD546E03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01D3C953-7ACE-4BF3-8994-4DC3BD546E03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01D3C953-7ACE-4BF3-8994-4DC3BD546E03}.Release|Any CPU.Build.0 = Release|Any CPU
-		{90E07085-1FA8-4F5A-89E8-6452E4547735}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{90E07085-1FA8-4F5A-89E8-6452E4547735}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{90E07085-1FA8-4F5A-89E8-6452E4547735}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{90E07085-1FA8-4F5A-89E8-6452E4547735}.Release|Any CPU.Build.0 = Release|Any CPU
 		{524EA207-4C39-4D27-8E05-092378221720}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{524EA207-4C39-4D27-8E05-092378221720}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{524EA207-4C39-4D27-8E05-092378221720}.Release|Any CPU.ActiveCfg = Release|Any CPU
