@@ -191,10 +191,10 @@ namespace TestHeroisvsMonstreV2
             bool probabilitycriticalhit = false;
             string nameatacker = "Arquera";
             string nameattacked = "Monstre";
-            string MsgAtk = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep només {3} de dany. Vida restant de {1}: {4}";
-            string MsgAtkCrit = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep només {3} de dany. Vida restant de {1}: {4}. {0} ha fet un atac critic.";
+            string MsgAtk = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep nomï¿½s {3} de dany. Vida restant de {1}: {4}";
+            string MsgAtkCrit = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep nomï¿½s {3} de dany. Vida restant de {1}: {4}. {0} ha fet un atac critic.";
             string MsgFailAtk = "{0} ataca a {1} pero falla el atac.";
-            string MsgAtkExpected = "Arquera ataca a Monstre amb 100 de dany. Monstre es defensa i rep només 75 de dany. Vida restant de Monstre: 875";
+            string MsgAtkExpected = "Arquera ataca a Monstre amb 100 de dany. Monstre es defensa i rep nomï¿½s 75 de dany. Vida restant de Monstre: 875";
             StringWriter sw = new();
             Console.SetOut(sw);
 
@@ -218,8 +218,8 @@ namespace TestHeroisvsMonstreV2
             bool probabilitycriticalhit = false;
             string nameatacker = "Arquera";
             string nameattacked = "Monstre";
-            string MsgAtk = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep només {3} de dany. Vida restant de {1}: {4}";
-            string MsgAtkCrit = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep només {3} de dany. Vida restant de {1}: {4}. {0} ha fet un atac critic.";
+            string MsgAtk = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep nomï¿½s {3} de dany. Vida restant de {1}: {4}";
+            string MsgAtkCrit = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep nomï¿½s {3} de dany. Vida restant de {1}: {4}. {0} ha fet un atac critic.";
             string MsgFailAtk = "{0} ataca a {1} pero falla el atac.";
             string MsgAtkExpected = "Arquera ataca a Monstre pero falla el atac.";
             StringWriter sw = new();
@@ -245,10 +245,10 @@ namespace TestHeroisvsMonstreV2
             bool probabilitycriticalhit = true;
             string nameatacker = "Arquera";
             string nameattacked = "Monstre";
-            string MsgAtk = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep només {3} de dany. Vida restant de {1}: {4}";
-            string MsgAtkCrit = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep només {3} de dany. Vida restant de {1}: {4}. {0} ha fet un atac critic.";
+            string MsgAtk = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep nomï¿½s {3} de dany. Vida restant de {1}: {4}";
+            string MsgAtkCrit = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep nomï¿½s {3} de dany. Vida restant de {1}: {4}. {0} ha fet un atac critic.";
             string MsgFailAtk = "{0} ataca a {1} pero falla el atac.";
-            string expectedMsg = "Arquera ataca a Monstre amb 100 de dany. Monstre es defensa i rep només 150 de dany. Vida restant de Monstre: 750. Arquera ha fet un atac critic.";
+            string expectedMsg = "Arquera ataca a Monstre amb 100 de dany. Monstre es defensa i rep nomï¿½s 150 de dany. Vida restant de Monstre: 750. Arquera ha fet un atac critic.";
             StringWriter sw = new();
             Console.SetOut(sw);
 
@@ -269,8 +269,8 @@ namespace TestHeroisvsMonstreV2
             double reductiondamagearcher = 25;
             string nameatacker = "Monstre";
             string nameattacked = "Arquera";
-            string MsgAtk = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep només {3} de dany. Vida restant de {1}: {4}";
-            string expectedMsg = "Monstre ataca a Arquera amb 100 de dany. Arquera es defensa i rep només 75 de dany. Vida restant de Arquera: 875";
+            string MsgAtk = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep nomï¿½s {3} de dany. Vida restant de {1}: {4}";
+            string expectedMsg = "Monstre ataca a Arquera amb 100 de dany. Arquera es defensa i rep nomï¿½s 75 de dany. Vida restant de Arquera: 875";
             StringWriter sw = new();
             Console.SetOut(sw);
 
@@ -357,8 +357,8 @@ namespace TestHeroisvsMonstreV2
             double reductiondamagemonster = 20;
             int cooldownespecialhabilitymagician = 0;
             string namemagician = "Maga";
-            string MsgAtk = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep només {3} de dany. Vida restant de {1}: {4}";
-            string expectedMsg = "Maga activa la seva habilitat especial, dispara una bola de foc que fa 3 cops el seu atac.\r\nMaga ataca a Monstre amb 400 de dany. Monstre es defensa i rep només 960 de dany. Vida restant de Monstre: 5560";
+            string MsgAtk = "{0} ataca a {1} amb {2} de dany. {1} es defensa i rep nomï¿½s {3} de dany. Vida restant de {1}: {4}";
+            string expectedMsg = "Maga activa la seva habilitat especial, dispara una bola de foc que fa 3 cops el seu atac.\r\nMaga ataca a Monstre amb 400 de dany. Monstre es defensa i rep nomï¿½s 960 de dany. Vida restant de Monstre: 5560";
             StringWriter sw = new();
             Console.SetOut(sw);
 
